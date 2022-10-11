@@ -25,8 +25,8 @@ def convert_year_ratio(birthday):
     # ＜出力＞
     #   - year_ratio_list（list）：10年に占める割合
 
+    p = is_setsuiri(birthday, birthday.month)
     for i, s in enumerate(kd.setsuiri):
-        p = is_setsuiri(birthday, birthday.month)
         if (s[0] == birthday.year) and (s[1] == birthday.month):
             if not p:
                 k = kd.setsuiri[i + 1]
