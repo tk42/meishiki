@@ -191,6 +191,7 @@ def find_zokan(birthday, shi):
                 y = s[0]
                 m = s[1] + p
             _setsuiri = datetime(year=y, month=m, day=s[2], hour=s[3], minute=s[4])
+            break
 
     if shi == 6:
         delta1 = timedelta(days=kd.zokan_time[shi][0][0], hours=kd.zokan_time[shi][0][1])
