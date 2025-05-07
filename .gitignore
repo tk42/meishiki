@@ -27,3 +27,6 @@ MANIFEST
 
 # PyPI
 .pypirc
+
+# pytest
+.coverage

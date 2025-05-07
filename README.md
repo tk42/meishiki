@@ -27,7 +27,7 @@ SEX should be specified when male = 0, female = 1
 
 ```bash
 $ pip install -e .
-$ pytest ./test
+$ pytest --cov=meishiki ./test
 ```
 
 ## TODO
