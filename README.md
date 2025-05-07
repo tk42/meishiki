@@ -34,9 +34,20 @@ $ pip install meishiki fastmcp
 $ python3 ./mcp_server.py
 ```
 
-and add the following to your ClaudeDesktop
+and add the following to your ClaudeDesktop config file:
 
-
+```json
+{
+  "mcpServers": {
+    "meishiki": {
+      "name": "Meishiki Server",
+      "command": "{local repository}/meishiki/.venv/bin/python3",
+      "args": ["-u", "{local repository}/meishiki/mcp_server.py"],
+      "transport": "stdio"
+    }
+  }
+}
+```
 
 ## Run tests
 
@@ -46,6 +57,8 @@ $ pytest --cov=meishiki ./test
 ```
 
 ## TODO
+
+- [ ] 節入り MCP
 
 - [ ] 逆引きテーブル作成
 
