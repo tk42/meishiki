@@ -2,7 +2,7 @@ from typing import List
 from datetime import datetime, timedelta
 from dataclasses import field, dataclass
 
-from meishiki.consts import kd
+from meishiki.consts import kd, Sex
 from meishiki.errors import MeishikiException
 
 
@@ -10,7 +10,7 @@ from meishiki.errors import MeishikiException
 class Meishiki:
 
     birthday: datetime
-    sex: int
+    sex: Sex
 
     tenkan: List[int] = field(default_factory=list)
     chishi: List[int] = field(default_factory=list)
@@ -437,7 +437,7 @@ def append_kaigou(d_kan, d_shi):
         return 0
 
 
-def build_meishiki(birthday: datetime, sex: int) -> Meishiki:
+def build_meishiki(birthday: datetime, sex: Sex) -> Meishiki:
 
     # 天干・地支を得る
     y_kan, y_shi = find_year_kanshi(birthday)
@@ -506,7 +506,7 @@ def build_meishiki(birthday: datetime, sex: int) -> Meishiki:
     # 命式を組成する
     meishiki = Meishiki(
         birthday,
-        sex,
+        sex.value,
         tenkan,
         chishi,
         zokan,

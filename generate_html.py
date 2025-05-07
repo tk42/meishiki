@@ -1,7 +1,6 @@
 import sys
 from datetime import datetime as dt
-
-from meishiki.consts import TemplateType
+from meishiki.consts import TemplateType, Sex
 from meishiki.meishiki import build_meishiki
 from meishiki.unsei import build_unsei
 from meishiki.output import output_html, output_stdio
@@ -10,7 +9,7 @@ if __name__ == "__main__":
     # Input as follows:
     # $ python3 ./generate_html.py 1978-09-26 13:51 0
     birthday = dt.strptime(sys.argv[1] + " " + sys.argv[2], "%Y-%m-%d %H:%M")
-    sex = int(sys.argv[3])
+    sex = Sex(int(sys.argv[3]))
 
     # 命式を組成する
     meishiki = build_meishiki(birthday, sex)

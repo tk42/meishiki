@@ -1,7 +1,9 @@
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime as dt
 
-from meishiki.consts import kd, TemplateType
+from meishiki.consts import kd, TemplateType, Sex
+from meishiki.meishiki import Meishiki
+from meishiki.unsei import Unsei
 from meishiki.util import convert_to_wareki
 
 
@@ -9,14 +11,10 @@ base_dir = "./template/"
 output_dir = "./output/"
 
 
-def output_html(meishiki, unsei, template=TemplateType.TYPE_I):
-
-    env = Environment(loader=FileSystemLoader(""))
-    template = env.get_template(base_dir + str(template.value))
-
+def output_content(meishiki: Meishiki, unsei: Unsei):
     wareki = convert_to_wareki(meishiki.birthday)
     birthday_str = meishiki.birthday.strftime(f"{wareki}%-m月%-d日 %-H時%-M分生")
-    sex_str = "男命" if meishiki.sex == 0 else "女命"
+    sex_str = "男命" if meishiki.sex == Sex.MALE.value else "女命"
 
     daiun = unsei.daiun
     nenun = unsei.nenun
@@ -166,15 +164,21 @@ def output_html(meishiki, unsei, template=TemplateType.TYPE_I):
 
         content.update(n_nen)
 
+    return content
+
+
+def output_html(meishiki: Meishiki, unsei: Unsei, template=TemplateType.TYPE_I):
+    content = output_content(meishiki, unsei)
+    env = Environment(loader=FileSystemLoader(""))
+    template = env.get_template(base_dir + str(template.value))
     result = template.render(content)
     file_name = output_dir + meishiki.birthday.strftime("%Y_%m%d_%H%M_") + str(meishiki.sex) + ".html"
     with open(file_name, "w", encoding="utf8") as f:
         f.write(result)
-
     return file_name
 
 
-def output_stdio(meishiki, unsei):
+def output_stdio(meishiki: Meishiki, unsei: Unsei):
 
     print("＜五行＞")
     for i, g in enumerate(meishiki.gogyo):

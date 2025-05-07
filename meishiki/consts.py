@@ -15,6 +15,12 @@ except Exception as e:
 kd = Box(raw)
 
 
+class Sex(Enum):
+    """性別を示すEnumクラス"""
+    MALE = 0  # 男性
+    FEMALE = 1  # 女性
+
+
 class TemplateType(Enum):
     TYPE_I = "template.html"
     TYPE_II = "template2.html"

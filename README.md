@@ -17,8 +17,8 @@ $ pip install meishiki
 
 Then,
 
-```
-# python3 ./generate_html.py YYYY-MM-DD HH:MM SEX
+```bash
+$ python3 ./generate_html.py YYYY-MM-DD HH:MM SEX
 ```
 
 SEX should be specified when male = 0, female = 1
@@ -33,6 +33,10 @@ $ source .venv/bin/activate
 $ pip install meishiki fastmcp
 $ python3 ./mcp_server.py
 ```
+
+and add the following to your ClaudeDesktop
+
+
 
 ## Run tests
 

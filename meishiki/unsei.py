@@ -4,7 +4,7 @@ from dataclasses import field, dataclass
 
 from meishiki.consts import kd
 from meishiki.errors import UnseiException
-from meishiki.meishiki import is_setsuiri
+from meishiki.meishiki import is_setsuiri, Meishiki
 
 
 @dataclass
@@ -367,7 +367,7 @@ def append_nenun(meishiki, daiun):
     return nenun
 
 
-def build_unsei(meishiki):
+def build_unsei(meishiki: Meishiki) -> Unsei:
 
     # 大運を得る
     daiun = append_daiun(meishiki)

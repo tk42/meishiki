@@ -1,6 +1,5 @@
 import pytest
 from datetime import datetime
-
 from meishiki.unsei import (
     convert_year_ratio,
     is_junun_gyakuun,
@@ -13,7 +12,7 @@ from meishiki.unsei import (
     Unsei,
 )
 from meishiki.errors import UnseiException
-from meishiki.consts import kd
+from meishiki.consts import kd, Sex
 from meishiki.meishiki import build_meishiki
 
 
@@ -26,10 +25,10 @@ class TestUnseiMethods:
             convert_year_ratio(datetime(2022, 12, 7, 12, 47))
 
     @pytest.mark.parametrize("sex,y_kan,expected", [
-        (0, 0, 1),
-        (1, 0, 0),
-        (0, 1, 0),
-        (1, 1, 1),
+        (Sex.MALE.value, 0, 1),
+        (Sex.FEMALE.value, 0, 0),
+        (Sex.MALE.value, 1, 0),
+        (Sex.FEMALE.value, 1, 1),
     ])
     def test_is_junun_gyakuun(self, sex, y_kan, expected):
         assert is_junun_gyakuun(sex, y_kan) == expected
@@ -57,7 +56,7 @@ class TestUnseiMethods:
 
     def test_build_unsei_and_append(self):
         birthday = datetime(1926, 1, 6, 10, 55)
-        meishiki = build_meishiki(birthday, 0)
+        meishiki = build_meishiki(birthday, Sex.MALE)
         unsei = build_unsei(meishiki)
         assert isinstance(unsei, Unsei)
         assert len(unsei.daiun) == 13
