@@ -5,5 +5,6 @@ from meishiki.consts import kd
 from meishiki.meishiki import build_meishiki
 from meishiki.unsei import build_unsei
 from meishiki.output import output_stdio
+from meishiki.errors import MeishikiException
 
-__all__ = ["kd", "build_meishiki", "build_unsei", "output_stdio"]
+__all__ = ["kd", "build_meishiki", "build_unsei", "output_stdio", "MeishikiException"]

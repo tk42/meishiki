@@ -437,7 +437,7 @@ def append_kaigou(d_kan, d_shi):
         return 0
 
 
-def build_meishiki(birthday, sex):
+def build_meishiki(birthday: datetime, sex: int) -> Meishiki:
 
     # 天干・地支を得る
     y_kan, y_shi = find_year_kanshi(birthday)

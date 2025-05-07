@@ -23,6 +23,17 @@ Then,
 
 SEX should be specified when male = 0, female = 1
 
+## How to run MCP server
+
+This library is supported MCP server.
+
+```bash
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ pip install meishiki fastmcp
+$ python3 ./mcp_server.py
+```
+
 ## Run tests
 
 ```bash
