@@ -23,6 +23,13 @@ Then,
 
 SEX should be specified when male = 0, female = 1
 
+## Run tests
+
+```bash
+$ pip install -e .
+$ pytest ./test
+```
+
 ## TODO
 
 - [ ] 逆引きテーブル作成
