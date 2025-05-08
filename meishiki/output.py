@@ -14,7 +14,7 @@ output_dir = "./output/"
 def output_content(meishiki: Meishiki, unsei: Unsei):
     wareki = convert_to_wareki(meishiki.birthday)
     birthday_str = meishiki.birthday.strftime(f"{wareki}%-m月%-d日 %-H時%-M分生")
-    sex_str = "男命" if meishiki.sex == Sex.MALE.value else "女命"
+    sex_str = "男命" if meishiki.sex == Sex.MALE else "女命"
 
     daiun = unsei.daiun
     nenun = unsei.nenun
@@ -201,11 +201,11 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei):
     if not meishiki.kango:
         print("干合なし")
     else:
-        for k in meishiki.kango:
-            b1 = kd.kango_chu[k[0][1]]  # 干１の場所
-            k1 = kd.kan[k[0][0]]  # 干１
-            b2 = kd.kango_chu[k[1][1]]  # 干２の場所
-            k2 = kd.kan[k[1][0]]  # 干２
+        for kango in meishiki.kango:
+            b1 = kd.kango_chu[kango[0][1]]  # 干１の場所
+            k1 = kd.kan[kango[0][0]]  # 干１
+            b2 = kd.kango_chu[kango[1][1]]  # 干２の場所
+            k2 = kd.kan[kango[1][0]]  # 干２
             print(b1 + "の「" + k1 + "」と" + b2 + "の「" + k2 + "」とが干合")
 
     print()
@@ -214,11 +214,11 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei):
     if not meishiki.shigo:
         print("支合なし")
     else:
-        for s in meishiki.shigo:
-            b1 = kd.shigo_chu[s[0][1]]  # 支１の場所
-            k1 = kd.shi[s[0][0]]  # 支１
-            b2 = kd.shigo_chu[s[1][1]]  # 支２の場所
-            k2 = kd.shi[s[1][0]]  # 支２
+        for shigo in meishiki.shigo:
+            b1 = kd.shigo_chu[shigo[0][1]]  # 支１の場所
+            k1 = kd.shi[shigo[0][0]]  # 支１
+            b2 = kd.shigo_chu[shigo[1][1]]  # 支２の場所
+            k2 = kd.shi[shigo[1][0]]  # 支２
             print(b1 + "の「" + k1 + "」と" + b2 + "の「" + k2 + "」とが支合")
 
     print()
@@ -227,17 +227,8 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei):
     if not meishiki.sango:
         print("三合会局なし")
     else:
-        sango = meishiki.sango
-        print(
-            kd.shi[sango[0][0]]
-            + ", "
-            + kd.shi[sango[0][1]]
-            + ", "
-            + kd.shi[sango[0][2]]
-            + "の三合"
-            + kd.gogyo[sango[1]]
-            + "局"
-        )
+        for places, fortune, _ in meishiki.sango:
+            print(f"{kd.shi[places[0]]}, {kd.shi[places[1]]}, {kd.shi[places[2]]}の三合{kd.gogyo[fortune]}局")
 
     print()
 
@@ -255,10 +246,8 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei):
     if not meishiki.hogo:
         print("方合なし")
     else:
-        hogo = meishiki.hogo
-        print(
-            kd.shi[hogo[0][0]] + ", " + kd.shi[hogo[0][1]] + ", " + kd.shi[hogo[0][2]] + "で" + kd.gogyo[hogo[1]] + "方合"
-        )
+        for places, fortune in meishiki.hogo:
+            print(f"{kd.shi[places[0]]}, {kd.shi[places[1]]}, {kd.shi[places[2]]}で{kd.gogyo[fortune]}方合")
 
     print()
 
@@ -271,12 +260,8 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei):
     if not meishiki.hitsuchu:
         print("七冲なし")
     else:
-        for h in meishiki.hitsuchu:
-            b1 = kd.shigo_chu[h[0][1]]  # 支１の場所
-            k1 = kd.shi[h[0][0]]  # 支１
-            b2 = kd.shigo_chu[h[1][1]]  # 支２の場所
-            k2 = kd.shi[h[1][0]]  # 支２
-            print(b1 + "の「" + k1 + "」が" + b2 + "の「" + k2 + "」を冲する")
+        for (d1, i1), (d2, i2) in meishiki.hitsuchu:
+            print(f"{kd.shigo_chu[i1]}の「{kd.shi[d1]}」が{kd.shigo_chu[i2]}の「{kd.shi[d2]}」を冲する")
 
     print()
 
@@ -284,11 +269,11 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei):
     if not meishiki.kei:
         print("刑なし")
     else:
-        for k in meishiki.kei:
-            b1 = kd.shigo_chu[k[0][1]]  # 支１の場所
-            k1 = kd.shi[k[0][0]]  # 支１
-            b2 = kd.shigo_chu[k[1][1]]  # 支２の場所
-            k2 = kd.shi[k[1][0]]  # 支２
+        for (c1, p1), (c2, p2) in meishiki.kei:
+            b1 = kd.shigo_chu[p1]  # 支１の場所
+            k1 = kd.shi[c1]  # 支１
+            b2 = kd.shigo_chu[p2]  # 支２の場所
+            k2 = kd.shi[c2]  # 支２
             print(b1 + "の「" + k1 + "」が、" + b2 + "の「" + k2 + "」を刑する")
 
     print()
@@ -297,11 +282,11 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei):
     if not meishiki.gai:
         print("害なし")
     else:
-        for g in meishiki.gai:
-            b1 = kd.shigo_chu[g[0][1]]  # 支１の場所
-            k1 = kd.shi[g[0][0]]  # 支１
-            b2 = kd.shigo_chu[g[1][1]]  # 支２の場所
-            k2 = kd.shi[g[1][0]]  # 支２
+        for (c1, p1), (c2, p2) in meishiki.gai:
+            b1 = kd.shigo_chu[p1]  # 支１の場所
+            k1 = kd.shi[c1]  # 支１
+            b2 = kd.shigo_chu[p2]  # 支２の場所
+            k2 = kd.shi[c2]  # 支２
             print(b1 + "の「" + k1 + "」と" + b2 + "の「" + k2 + "」とが害")
 
     print()

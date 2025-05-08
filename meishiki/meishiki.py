@@ -1,10 +1,19 @@
-from typing import List
+from typing import List, Tuple
 from datetime import datetime, timedelta
 from dataclasses import field, dataclass
 
 from meishiki.consts import kd, Sex
 from meishiki.errors import MeishikiException
 
+# 型エイリアス定義
+KangoType = Tuple[Tuple[int, int], Tuple[int, int], int]
+ShigoType = Tuple[Tuple[int, int], Tuple[int, int]]
+HogoType = Tuple[Tuple[int, int, int], int]
+SangoType = Tuple[Tuple[int, int, int], int, int]
+HankaiType = Tuple[Tuple[int, int], int, int, int]
+HitsuchuType = Tuple[Tuple[int, int], Tuple[int, int]]
+KeiType = Tuple[Tuple[int, int], Tuple[int, int]]
+GaiType = Tuple[Tuple[int, int], Tuple[int, int]]
 
 @dataclass
 class Meishiki:
@@ -29,14 +38,14 @@ class Meishiki:
     tsuhen: List[int] = field(default_factory=list)
     twelve_fortune: List[int] = field(default_factory=list)
 
-    kango: List[int] = field(default_factory=list)
-    shigo: List[int] = field(default_factory=list)
-    hogo: List[int] = field(default_factory=list)
-    sango: List[int] = field(default_factory=list)
-    hankai: List[int] = field(default_factory=list)
-    hitsuchu: List[int] = field(default_factory=list)
-    kei: List[int] = field(default_factory=list)
-    gai: List[int] = field(default_factory=list)
+    kango: List[KangoType] = field(default_factory=list)
+    shigo: List[ShigoType] = field(default_factory=list)
+    hogo: List[HogoType] = field(default_factory=list)
+    sango: List[SangoType] = field(default_factory=list)
+    hankai: List[HankaiType] = field(default_factory=list)
+    hitsuchu: List[HitsuchuType] = field(default_factory=list)
+    kei: List[KeiType] = field(default_factory=list)
+    gai: List[GaiType] = field(default_factory=list)
     kubo: List[int] = field(default_factory=list)
     choko: str = ""
 
@@ -506,7 +515,7 @@ def build_meishiki(birthday: datetime, sex: Sex) -> Meishiki:
     # 命式を組成する
     meishiki = Meishiki(
         birthday,
-        sex.value,
+        sex,
         tenkan,
         chishi,
         zokan,

@@ -2,7 +2,7 @@ from typing import List
 from datetime import datetime
 from dataclasses import field, dataclass
 
-from meishiki.consts import kd
+from meishiki.consts import kd, Sex
 from meishiki.errors import UnseiException
 from meishiki.meishiki import is_setsuiri, Meishiki
 
@@ -10,8 +10,8 @@ from meishiki.meishiki import is_setsuiri, Meishiki
 @dataclass
 class Unsei:
 
-    daiun: List[int] = field(default_factory=list)
-    nenun: List[int] = field(default_factory=list)
+    daiun: List[List[int]] = field(default_factory=list)
+    nenun: List[List[int]] = field(default_factory=list)
 
 
 def convert_year_ratio(birthday):
@@ -50,7 +50,7 @@ def convert_year_ratio(birthday):
     return year_ratio_list
 
 
-def is_junun_gyakuun(sex, y_kan):
+def is_junun_gyakuun(sex: Sex, y_kan: int):
 
     # ＜機能＞
     # 大運が順運か逆運かを判定する
@@ -62,14 +62,17 @@ def is_junun_gyakuun(sex, y_kan):
     # ＜異常検出＞
     # 取得できなかった場合はエラーメッセージを出力して強制終了する
 
-    if (((y_kan % 2) == 0) and (sex == 0)) or (((y_kan % 2) == 1) and (sex == 1)):
+    if not isinstance(sex, Sex):
+        raise UnseiException(f"sex must be Sex Enum: {sex}")
+
+    if (((y_kan % 2) == 0) and (sex == Sex.MALE)) or (((y_kan % 2) == 1) and (sex == Sex.FEMALE)):
         return 1  # 年柱天干が陽干の男命 or 年柱天干が陰干の女命は、順運
 
-    elif (((y_kan % 2) == 1) and (sex == 0)) or (((y_kan % 2) == 0) and (sex == 1)):
+    elif (((y_kan % 2) == 1) and (sex == Sex.MALE)) or (((y_kan % 2) == 0) and (sex == Sex.FEMALE)):
         return 0  # 年柱天干が陽干の女命 or 年柱天干が陰干の男命は、逆運
 
     else:
-        raise UnseiException("大運の順逆を判定できませんでした。")
+        raise UnseiException(f"大運の順逆を判定できませんでした。 {y_kan} {sex}")
 
 
 def find_kanshi_idx(kan, shi, p):
@@ -259,7 +262,7 @@ def is_kansatsu(d_tsuhen, n_tsuhen):
     return -1
 
 
-def append_daiun(meishiki):
+def append_daiun(meishiki: Meishiki):
 
     # ＜機能＞
     # 大運を命式に追加する

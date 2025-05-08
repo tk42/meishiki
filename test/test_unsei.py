@@ -25,10 +25,10 @@ class TestUnseiMethods:
             convert_year_ratio(datetime(2022, 12, 7, 12, 47))
 
     @pytest.mark.parametrize("sex,y_kan,expected", [
-        (Sex.MALE.value, 0, 1),
-        (Sex.FEMALE.value, 0, 0),
-        (Sex.MALE.value, 1, 0),
-        (Sex.FEMALE.value, 1, 1),
+        (Sex.MALE, 0, 1),
+        (Sex.FEMALE, 0, 0),
+        (Sex.MALE, 1, 0),
+        (Sex.FEMALE, 1, 1),
     ])
     def test_is_junun_gyakuun(self, sex, y_kan, expected):
         assert is_junun_gyakuun(sex, y_kan) == expected
