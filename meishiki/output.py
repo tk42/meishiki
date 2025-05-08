@@ -55,7 +55,7 @@ def output_content(meishiki: Meishiki, unsei: Unsei):
         "sui": meishiki.gogyo[4],
     }
 
-    p1 = "&nbsp;" + str(daiun[0][0]) if len(str(daiun[0][0])) == 1 else str(daiun[0][0])
+    p1 = " " + str(daiun[0][0]) if len(str(daiun[0][0])) == 1 else str(daiun[0][0])
     d_nen = {
         "p1": p1,
         "p2": daiun[1][0],
@@ -106,17 +106,17 @@ def output_content(meishiki: Meishiki, unsei: Unsei):
     for i, n in enumerate(nenun):
         if age == n[0]:
             break
-        n1 = "&nbsp;" + str(nenun[i][0]) if len(str(nenun[i][0])) == 1 else str(nenun[i][0])
-        n2 = "&nbsp;" + str(nenun[i + 1][0]) if len(str(nenun[i + 1][0])) == 1 else str(nenun[i + 1][0])
-        n3 = "&nbsp;" + str(nenun[i + 2][0]) if len(str(nenun[i + 2][0])) == 1 else str(nenun[i + 2][0])
-        n4 = "&nbsp;" + str(nenun[i + 3][0]) if len(str(nenun[i + 3][0])) == 1 else str(nenun[i + 3][0])
-        n5 = "&nbsp;" + str(nenun[i + 4][0]) if len(str(nenun[i + 4][0])) == 1 else str(nenun[i + 4][0])
-        n6 = "&nbsp;" + str(nenun[i + 5][0]) if len(str(nenun[i + 5][0])) == 1 else str(nenun[i + 5][0])
-        n7 = "&nbsp;" + str(nenun[i + 6][0]) if len(str(nenun[i + 6][0])) == 1 else str(nenun[i + 6][0])
-        n8 = "&nbsp;" + str(nenun[i + 7][0]) if len(str(nenun[i + 7][0])) == 1 else str(nenun[i + 7][0])
-        n9 = "&nbsp;" + str(nenun[i + 8][0]) if len(str(nenun[i + 8][0])) == 1 else str(nenun[i + 8][0])
-        n10 = "&nbsp;" + str(nenun[i + 9][0]) if len(str(nenun[i + 9][0])) == 1 else str(nenun[i + 9][0])
-        n11 = "&nbsp;" + str(nenun[i + 10][0]) if len(str(nenun[i + 10][0])) == 1 else str(nenun[i + 10][0])
+        n1 = " " + str(nenun[i][0]) if len(str(nenun[i][0])) == 1 else str(nenun[i][0])
+        n2 = " " + str(nenun[i + 1][0]) if len(str(nenun[i + 1][0])) == 1 else str(nenun[i + 1][0])
+        n3 = " " + str(nenun[i + 2][0]) if len(str(nenun[i + 2][0])) == 1 else str(nenun[i + 2][0])
+        n4 = " " + str(nenun[i + 3][0]) if len(str(nenun[i + 3][0])) == 1 else str(nenun[i + 3][0])
+        n5 = " " + str(nenun[i + 4][0]) if len(str(nenun[i + 4][0])) == 1 else str(nenun[i + 4][0])
+        n6 = " " + str(nenun[i + 5][0]) if len(str(nenun[i + 5][0])) == 1 else str(nenun[i + 5][0])
+        n7 = " " + str(nenun[i + 6][0]) if len(str(nenun[i + 6][0])) == 1 else str(nenun[i + 6][0])
+        n8 = " " + str(nenun[i + 7][0]) if len(str(nenun[i + 7][0])) == 1 else str(nenun[i + 7][0])
+        n9 = " " + str(nenun[i + 8][0]) if len(str(nenun[i + 8][0])) == 1 else str(nenun[i + 8][0])
+        n10 = " " + str(nenun[i + 9][0]) if len(str(nenun[i + 9][0])) == 1 else str(nenun[i + 9][0])
+        n11 = " " + str(nenun[i + 10][0]) if len(str(nenun[i + 10][0])) == 1 else str(nenun[i + 10][0])
 
         n_nen = {
             "n1": n1,
@@ -167,15 +167,64 @@ def output_content(meishiki: Meishiki, unsei: Unsei):
     return content
 
 
-def output_html(meishiki: Meishiki, unsei: Unsei, template=TemplateType.TYPE_I):
+def output_html(meishiki: Meishiki, unsei: Unsei, template=TemplateType.TYPE_I, save=True):
     content = output_content(meishiki, unsei)
     env = Environment(loader=FileSystemLoader(""))
     template = env.get_template(base_dir + str(template.value))
     result = template.render(content)
-    file_name = output_dir + meishiki.birthday.strftime("%Y_%m%d_%H%M_") + str(meishiki.sex) + ".html"
-    with open(file_name, "w", encoding="utf8") as f:
-        f.write(result)
-    return file_name
+    if save:
+        file_name = output_dir + meishiki.birthday.strftime("%Y_%m%d_%H%M_") + str(meishiki.sex) + ".html"
+        with open(file_name, "w", encoding="utf8") as f:
+            f.write(result)
+    return result
+
+
+def output_markdown(meishiki: Meishiki, unsei: Unsei) -> str:
+    """
+    meishikiとunseiからMarkdown形式で命式・大運・年運を生成します。
+    """
+    content = output_content(meishiki, unsei)
+    lines = []
+    # 命式表
+    lines.append("# 命式")
+    lines.append("")
+    lines.append(f"- 生年月日: {content['birthday']}")
+    lines.append(f"- 性別: {content['sex']}")
+    lines.append("")
+    lines.append("| 柱 | 天干 | 支干 | 蔵干 | 十二運 | 通変(天干) | 通変(蔵干) |")
+    lines.append("| --- | --- | --- | --- | --- | --- | --- |")
+    pillars = ["年", "月", "日", "時"]
+    for i, p in enumerate(pillars, start=1):
+        t = content[f"tenkan{i}"]
+        s = content[f"chishi{i}"]
+        z = content[f"zokan{i}"]
+        ftn = content[f"fortune{i}"]
+        ts_t = content[f"tsuhen_tenkan{i}"]
+        ts_z = content[f"tsuhen_zokan{i}"]
+        lines.append(f"| {p} | {t} | {s} | {z} | {ftn} | {ts_t} | {ts_z} |")
+    lines.append("")
+    # 大運表
+    lines.append("## 大運")
+    lines.append("")
+    lines.append("| 開始年齢 | 干支 | 通変 |")
+    lines.append("| --- | --- | --- |")
+    for i in range(1, 11):
+        age = content[f"p{i}"]
+        dk = content[f"d_kan{i}"] + content[f"d_shi{i}"]
+        dts = content[f"d_tsuhen{i}"]
+        lines.append(f"| {age} | {dk} | {dts} |")
+    lines.append("")
+    # 年運表
+    lines.append("## 年運")
+    lines.append("")
+    lines.append("| 年齢 | 干支 | 通変 |")
+    lines.append("| --- | --- | --- |")
+    for i in range(1, 11):
+        age = content[f"n{i}"]
+        nk = content[f"n_kan{i}"] + content[f"n_shi{i}"]
+        nts = content[f"n_tsuhen{i}"]
+        lines.append(f"| {age} | {nk} | {nts} |")
+    return "\n".join(lines)
 
 
 def output_stdio(meishiki: Meishiki, unsei: Unsei):

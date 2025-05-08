@@ -3,20 +3,19 @@ from fastmcp import FastMCP
 from meishiki import build_meishiki, build_unsei
 from meishiki.consts import Sex
 from meishiki.errors import MeishikiException
-from meishiki.output import output_content
-import json
+from meishiki.output import output_markdown
 
 mcp = FastMCP("Meishiki Server")
 
 
 @mcp.tool()
-def calculate_meishiki(birthday: str, sex: Sex) -> dict:
+def calculate_meishiki(birthday: str, sex: Sex) -> str:
     """
     Args:
         birthday: ISO8601文字列 (例: "1990-01-23T15:30:00")
         sex: Sex.MALEまたはSex.FEMALE
     Returns:
-        Unsei.__dict__ をそのまま返却
+        Markdown形式の命式
     """
     # 文字列→datetime
     try:
@@ -40,12 +39,12 @@ def calculate_meishiki(birthday: str, sex: Sex) -> dict:
 
     # 命式および運勢を出力
     try:
-        result = output_content(m, u)
+        markdown = output_markdown(m, u)
     except MeishikiException as e:
         # FastMCP側でエラーを整形
         raise RuntimeError(str(e))
     
-    return json.dumps(result, ensure_ascii=False)
+    return markdown
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ import pytest
 
 from meishiki.meishiki import build_meishiki
 from meishiki.unsei import build_unsei
-from meishiki.output import output_content, output_stdio
+from meishiki.output import output_content, output_stdio, output_markdown, output_html
 from meishiki.consts import Sex
 
 
@@ -29,13 +29,272 @@ def sample2():
 def test_output_content(sample):
     meishi, unsei = sample
     result = output_content(meishi, unsei)
-    assert result == {'birthday': '平成12年1月1日 12時0分生', 'sex': '男命', 'tenkan1': '己', 'chishi1': '卯', 'zokan1': '乙', 'fortune1': '沐', 'tsuhen_tenkan1': '劫財', 'tsuhen_zokan1': '正官', 'tenkan2': '丙', 'chishi2': '子', 'zokan2': '癸', 'fortune2': '胎', 'tsuhen_tenkan2': '偏印', 'tsuhen_zokan2': '正財', 'tenkan3': '戊', 'chishi3': '午', 'zokan3': '丁', 'fortune3': '帝', 'tsuhen_tenkan3': '比肩', 'tsuhen_zokan3': '印綬', 'tenkan4': '戊', 'chishi4': '午', 'zokan4': '丁', 'fortune4': '帝', 'tsuhen_tenkan4': '比肩', 'tsuhen_zokan4': '印綬', 'choko': '火土', 'kubo': '子丑', 'moku': 1, 'ka': 3, 'do': 3, 'gon': 0, 'sui': 1, 'p1': '&nbsp;8', 'p2': 18, 'p3': 28, 'p4': 38, 'p5': 48, 'p6': 58, 'p7': 68, 'p8': 78, 'p9': 88, 'p10': 98, 'p11': 108, 'd_tsuhen1': '正官', 'd_kan1': '乙', 'd_shi1': '亥', 'd_tsuhen2': '偏官', 'd_kan2': '甲', 'd_shi2': '戌', 'd_tsuhen3': '正財', 'd_kan3': '癸', 'd_shi3': '酉', 'd_tsuhen4': '偏財', 'd_kan4': '壬', 'd_shi4': '申', 'd_tsuhen5': '傷官', 'd_kan5': '辛', 'd_shi5': '未', 'd_tsuhen6': '食神', 'd_kan6': '庚', 'd_shi6': '午', 'd_tsuhen7': '劫財', 'd_kan7': '己', 'd_shi7': '巳', 'd_tsuhen8': '比肩', 'd_kan8': '戊', 'd_shi8': '辰', 'd_tsuhen9': '印綬', 'd_kan9': '丁', 'd_shi9': '卯', 'd_tsuhen10': '偏印', 'd_kan10': '丙', 'd_shi10': '寅', 'n1': '24', 'n2': '25', 'n3': '26', 'n4': '27', 'n5': '28', 'n6': '29', 'n7': '30', 'n8': '31', 'n9': '32', 'n10': '33', 'n11': '34', 'n_tsuhen1': '偏官', 'n_kan1': '甲', 'n_shi1': '辰', 'n_tsuhen2': '正官', 'n_kan2': '乙', 'n_shi2': '巳', 'n_tsuhen3': '偏印', 'n_kan3': '丙', 'n_shi3': '午', 'n_tsuhen4': '印綬', 'n_kan4': '丁', 'n_shi4': '未', 'n_tsuhen5': '比肩', 'n_kan5': '戊', 'n_shi5': '申', 'n_tsuhen6': '劫財', 'n_kan6': '己', 'n_shi6': '酉', 'n_tsuhen7': '食神', 'n_kan7': '庚', 'n_shi7': '戌', 'n_tsuhen8': '傷官', 'n_kan8': '辛', 'n_shi8': '亥', 'n_tsuhen9': '偏財', 'n_kan9': '壬', 'n_shi9': '子', 'n_tsuhen10': '正財', 'n_kan10': '癸', 'n_shi10': '丑'}
+    assert result == {'birthday': '平成12年1月1日 12時0分生', 'sex': '男命', 'tenkan1': '己', 'chishi1': '卯', 'zokan1': '乙', 'fortune1': '沐', 'tsuhen_tenkan1': '劫財', 'tsuhen_zokan1': '正官', 'tenkan2': '丙', 'chishi2': '子', 'zokan2': '癸', 'fortune2': '胎', 'tsuhen_tenkan2': '偏印', 'tsuhen_zokan2': '正財', 'tenkan3': '戊', 'chishi3': '午', 'zokan3': '丁', 'fortune3': '帝', 'tsuhen_tenkan3': '比肩', 'tsuhen_zokan3': '印綬', 'tenkan4': '戊', 'chishi4': '午', 'zokan4': '丁', 'fortune4': '帝', 'tsuhen_tenkan4': '比肩', 'tsuhen_zokan4': '印綬', 'choko': '火土', 'kubo': '子丑', 'moku': 1, 'ka': 3, 'do': 3, 'gon': 0, 'sui': 1, 'p1': ' 8', 'p2': 18, 'p3': 28, 'p4': 38, 'p5': 48, 'p6': 58, 'p7': 68, 'p8': 78, 'p9': 88, 'p10': 98, 'p11': 108, 'd_tsuhen1': '正官', 'd_kan1': '乙', 'd_shi1': '亥', 'd_tsuhen2': '偏官', 'd_kan2': '甲', 'd_shi2': '戌', 'd_tsuhen3': '正財', 'd_kan3': '癸', 'd_shi3': '酉', 'd_tsuhen4': '偏財', 'd_kan4': '壬', 'd_shi4': '申', 'd_tsuhen5': '傷官', 'd_kan5': '辛', 'd_shi5': '未', 'd_tsuhen6': '食神', 'd_kan6': '庚', 'd_shi6': '午', 'd_tsuhen7': '劫財', 'd_kan7': '己', 'd_shi7': '巳', 'd_tsuhen8': '比肩', 'd_kan8': '戊', 'd_shi8': '辰', 'd_tsuhen9': '印綬', 'd_kan9': '丁', 'd_shi9': '卯', 'd_tsuhen10': '偏印', 'd_kan10': '丙', 'd_shi10': '寅', 'n1': '24', 'n2': '25', 'n3': '26', 'n4': '27', 'n5': '28', 'n6': '29', 'n7': '30', 'n8': '31', 'n9': '32', 'n10': '33', 'n11': '34', 'n_tsuhen1': '偏官', 'n_kan1': '甲', 'n_shi1': '辰', 'n_tsuhen2': '正官', 'n_kan2': '乙', 'n_shi2': '巳', 'n_tsuhen3': '偏印', 'n_kan3': '丙', 'n_shi3': '午', 'n_tsuhen4': '印綬', 'n_kan4': '丁', 'n_shi4': '未', 'n_tsuhen5': '比肩', 'n_kan5': '戊', 'n_shi5': '申', 'n_tsuhen6': '劫財', 'n_kan6': '己', 'n_shi6': '酉', 'n_tsuhen7': '食神', 'n_kan7': '庚', 'n_shi7': '戌', 'n_tsuhen8': '傷官', 'n_kan8': '辛', 'n_shi8': '亥', 'n_tsuhen9': '偏財', 'n_kan9': '壬', 'n_shi9': '子', 'n_tsuhen10': '正財', 'n_kan10': '癸', 'n_shi10': '丑'}
 
 
 def test_output_content2(sample2):
     meishi, unsei = sample2
     result = output_content(meishi, unsei)
-    assert result == {'birthday': '平成元年10月28日 12時0分生', 'sex': '男命', 'tenkan1': '己', 'chishi1': '巳', 'zokan1': '丙', 'fortune1': '死', 'tsuhen_tenkan1': '偏印', 'tsuhen_zokan1': '正官', 'tenkan2': '甲', 'chishi2': '戌', 'zokan2': '戊', 'fortune2': '冠', 'tsuhen_tenkan2': '正財', 'tsuhen_zokan2': '印綬', 'tenkan3': '辛', 'chishi3': '酉', 'zokan3': '辛', 'fortune3': '建', 'tsuhen_tenkan3': '比肩', 'tsuhen_zokan3': '比肩', 'tenkan4': '甲', 'chishi4': '午', 'zokan4': '己', 'fortune4': '病', 'tsuhen_tenkan4': '正財', 'tsuhen_zokan4': '偏印', 'choko': '火木', 'kubo': '子丑', 'moku': 2, 'ka': 2, 'do': 2, 'gon': 2, 'sui': 0, 'p1': '&nbsp;7', 'p2': 17, 'p3': 27, 'p4': 37, 'p5': 47, 'p6': 57, 'p7': 67, 'p8': 77, 'p9': 87, 'p10': 97, 'p11': 107, 'd_tsuhen1': '食神', 'd_kan1': '癸', 'd_shi1': '酉', 'd_tsuhen2': '傷官', 'd_kan2': '壬', 'd_shi2': '申', 'd_tsuhen3': '比肩', 'd_kan3': '辛', 'd_shi3': '未', 'd_tsuhen4': '劫財', 'd_kan4': '庚', 'd_shi4': '午', 'd_tsuhen5': '偏印', 'd_kan5': '己', 'd_shi5': '巳', 'd_tsuhen6': '印綬', 'd_kan6': '戊', 'd_shi6': '辰', 'd_tsuhen7': '偏官', 'd_kan7': '丁', 'd_shi7': '卯', 'd_tsuhen8': '正官', 'd_kan8': '丙', 'd_shi8': '寅', 'd_tsuhen9': '偏財', 'd_kan9': '乙', 'd_shi9': '丑', 'd_tsuhen10': '正財', 'd_kan10': '甲', 'd_shi10': '子', 'n1': '35', 'n2': '36', 'n3': '37', 'n4': '38', 'n5': '39', 'n6': '40', 'n7': '41', 'n8': '42', 'n9': '43', 'n10': '44', 'n11': '45', 'n_tsuhen1': '正財', 'n_kan1': '甲', 'n_shi1': '辰', 'n_tsuhen2': '偏財', 'n_kan2': '乙', 'n_shi2': '巳', 'n_tsuhen3': '正官', 'n_kan3': '丙', 'n_shi3': '午', 'n_tsuhen4': '偏官', 'n_kan4': '丁', 'n_shi4': '未', 'n_tsuhen5': '印綬', 'n_kan5': '戊', 'n_shi5': '申', 'n_tsuhen6': '偏印', 'n_kan6': '己', 'n_shi6': '酉', 'n_tsuhen7': '劫財', 'n_kan7': '庚', 'n_shi7': '戌', 'n_tsuhen8': '比肩', 'n_kan8': '辛', 'n_shi8': '亥', 'n_tsuhen9': '傷官', 'n_kan9': '壬', 'n_shi9': '子', 'n_tsuhen10': '食神', 'n_kan10': '癸', 'n_shi10': '丑'}
+    assert result == {'birthday': '平成元年10月28日 12時0分生', 'sex': '男命', 'tenkan1': '己', 'chishi1': '巳', 'zokan1': '丙', 'fortune1': '死', 'tsuhen_tenkan1': '偏印', 'tsuhen_zokan1': '正官', 'tenkan2': '甲', 'chishi2': '戌', 'zokan2': '戊', 'fortune2': '冠', 'tsuhen_tenkan2': '正財', 'tsuhen_zokan2': '印綬', 'tenkan3': '辛', 'chishi3': '酉', 'zokan3': '辛', 'fortune3': '建', 'tsuhen_tenkan3': '比肩', 'tsuhen_zokan3': '比肩', 'tenkan4': '甲', 'chishi4': '午', 'zokan4': '己', 'fortune4': '病', 'tsuhen_tenkan4': '正財', 'tsuhen_zokan4': '偏印', 'choko': '火木', 'kubo': '子丑', 'moku': 2, 'ka': 2, 'do': 2, 'gon': 2, 'sui': 0, 'p1': ' 7', 'p2': 17, 'p3': 27, 'p4': 37, 'p5': 47, 'p6': 57, 'p7': 67, 'p8': 77, 'p9': 87, 'p10': 97, 'p11': 107, 'd_tsuhen1': '食神', 'd_kan1': '癸', 'd_shi1': '酉', 'd_tsuhen2': '傷官', 'd_kan2': '壬', 'd_shi2': '申', 'd_tsuhen3': '比肩', 'd_kan3': '辛', 'd_shi3': '未', 'd_tsuhen4': '劫財', 'd_kan4': '庚', 'd_shi4': '午', 'd_tsuhen5': '偏印', 'd_kan5': '己', 'd_shi5': '巳', 'd_tsuhen6': '印綬', 'd_kan6': '戊', 'd_shi6': '辰', 'd_tsuhen7': '偏官', 'd_kan7': '丁', 'd_shi7': '卯', 'd_tsuhen8': '正官', 'd_kan8': '丙', 'd_shi8': '寅', 'd_tsuhen9': '偏財', 'd_kan9': '乙', 'd_shi9': '丑', 'd_tsuhen10': '正財', 'd_kan10': '甲', 'd_shi10': '子', 'n1': '35', 'n2': '36', 'n3': '37', 'n4': '38', 'n5': '39', 'n6': '40', 'n7': '41', 'n8': '42', 'n9': '43', 'n10': '44', 'n11': '45', 'n_tsuhen1': '正財', 'n_kan1': '甲', 'n_shi1': '辰', 'n_tsuhen2': '偏財', 'n_kan2': '乙', 'n_shi2': '巳', 'n_tsuhen3': '正官', 'n_kan3': '丙', 'n_shi3': '午', 'n_tsuhen4': '偏官', 'n_kan4': '丁', 'n_shi4': '未', 'n_tsuhen5': '印綬', 'n_kan5': '戊', 'n_shi5': '申', 'n_tsuhen6': '偏印', 'n_kan6': '己', 'n_shi6': '酉', 'n_tsuhen7': '劫財', 'n_kan7': '庚', 'n_shi7': '戌', 'n_tsuhen8': '比肩', 'n_kan8': '辛', 'n_shi8': '亥', 'n_tsuhen9': '傷官', 'n_kan9': '壬', 'n_shi9': '子', 'n_tsuhen10': '食神', 'n_kan10': '癸', 'n_shi10': '丑'}
+
+
+def test_output_html(sample):
+    meishi, unsei = sample
+    result = output_html(meishi, unsei, save=False)
+    print(result)
+    assert result == """
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>御命式</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no">
+<meta name="author" content="">
+<meta name="keywords" content="">
+<meta name="description" content="">
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/lp.css">
+</head>
+<body>
+<div class="wrap">
+
+<div class="head">
+<dl>
+	<dt>平成12年1月1日 12時0分生 男命</dt>
+	<dd>御命式</dd>
+</dl>
+</div>
+
+
+<div class="cont">
+
+<div class="cont_line cont_child_1">
+<div class="tate">
+<p>
+	<div class="time">年</div>
+	<div class="eto"><span>己</span><span>卯</span><span>乙</span></div>
+	<div class="txt">沐</div>
+</p>
+</div>
+<div class="furikana"><p class="item01">劫財</p><p class="item02">正官</p></div>
+</div>
+
+<div class="cont_line cont_child_2">
+<div class="tate">
+<p>
+	<div class="time">月</div>
+	<div class="eto"><span>丙</span><span>子</span><span>癸</span></div>
+	<div class="txt">胎</div>
+</p>
+</div>
+<div class="furikana"><p class="item01">偏印</p><p class="item02">正財</p></div>
+</div>
+
+<div class="cont_line cont_child_3">
+<div class="tate">
+<p>
+	<div class="time">日</div>
+	<div class="eto"><span>戊</span><span>午</span><span>丁</span></div>
+	<div class="txt">帝</div>
+</p>
+</div>
+<div class="furikana"><p class="item02">印綬</p></div>
+</div>
+
+<div class="cont_line cont_child_4">
+<div class="tate">
+<p>
+	<div class="time">時</div>
+	<div class="eto"><span>戊</span><span>午</span><span>丁</span></div>
+	<div class="txt">帝</div>
+</p>
+</div>
+<div class="furikana"><p class="item01">比肩</p><p class="item02">印綬</p></div>
+</div>
+
+</div>
+
+
+
+<div class="line">
+<div class="line_ttl">大運</div>
+<ul class="line_num">
+<li class="num_child_1"> 8</li> 
+<li class="num_child_2">18</li>
+<li class="num_child_3">28</li>
+<li class="num_child_4">38</li>
+<li class="num_child_5">48</li>
+<li class="num_child_6">58</li>
+<li class="num_child_7">68</li>
+<li class="num_child_8">78</li>
+<li class="num_child_9">88</li>
+<li class="num_child_10">98</li>
+<li class="num_child_11">108</li>  
+</ul>
+
+<div class="yaji">
+	<img src="img/yaji.png">
+</div>
+<div class="line_content">
+	<dl class="line_child_1">
+		<dt>正官</dt>
+		<dd>乙亥</dd>
+	</dl>
+	<dl class="line_child_2">
+		<dt>偏官</dt>
+		<dd>甲戌</dd>
+	</dl>
+	<dl class="line_child_3">
+		<dt>正財</dt>
+		<dd>癸酉</dd>
+	</dl>
+	<dl class="line_child_4">
+		<dt>偏財</dt>
+		<dd>壬申</dd>
+	</dl>
+	<dl class="line_child_5">
+		<dt>傷官</dt>
+		<dd>辛未</dd>
+	</dl>
+	<dl class="line_child_6">
+		<dt>食神</dt>
+		<dd>庚午</dd>
+	</dl>
+	<dl class="line_child_7">
+		<dt>劫財</dt>
+		<dd>己巳</dd>
+	</dl>
+	<dl class="line_child_8">
+		<dt>比肩</dt>
+		<dd>戊辰</dd>
+	</dl>
+	<dl class="line_child_9">
+		<dt>印綬</dt>
+		<dd>丁卯</dd>
+	</dl>
+	<dl class="line_child_10">
+		<dt>偏印</dt>
+		<dd>丙寅</dd>
+	</dl>
+</div>
+</div>
+
+
+
+<div class="line second">
+<div class="line_ttl">年運</div>
+<ul class="line_num">
+<li class="num_child_1">24</li> 
+<li class="num_child_2">25</li>
+<li class="num_child_3">26</li>
+<li class="num_child_4">27</li>
+<li class="num_child_5">28</li>
+<li class="num_child_6">29</li>
+<li class="num_child_7">30</li>
+<li class="num_child_8">31</li>
+<li class="num_child_9">32</li>
+<li class="num_child_10">33</li>
+<li class="num_child_11">34</li>
+</ul>
+
+<div class="yaji">
+	<img src="img/yaji.png">
+</div>
+<div class="line_content">
+	<dl class="line_child_1">
+		<dt>偏官</dt>
+		<dd>甲辰</dd>
+	</dl>
+	<dl class="line_child_2">
+		<dt>正官</dt>
+		<dd>乙巳</dd>
+	</dl>
+	<dl class="line_child_3">
+		<dt>偏印</dt>
+		<dd>丙午</dd>
+	</dl>
+	<dl class="line_child_4">
+		<dt>印綬</dt>
+		<dd>丁未</dd>
+	</dl>
+	<dl class="line_child_5">
+		<dt>比肩</dt>
+		<dd>戊申</dd>
+	</dl>
+	<dl class="line_child_6">
+		<dt>劫財</dt>
+		<dd>己酉</dd>
+	</dl>
+	<dl class="line_child_7">
+		<dt>食神</dt>
+		<dd>庚戌</dd>
+	</dl>
+	<dl class="line_child_8">
+		<dt>傷官</dt>
+		<dd>辛亥</dd>
+	</dl>
+	<dl class="line_child_9">
+		<dt>偏財</dt>
+		<dd>壬子</dd>
+	</dl>
+	<dl class="line_child_10">
+		<dt>正財</dt>
+		<dd>癸丑</dd>
+	</dl>
+</div>
+</div>
+
+</div>
+</body>
+</html>"""
+
+
+def test_output_markdown(sample):
+    meishi, unsei = sample
+    result = output_markdown(meishi, unsei)
+    print(result)
+    assert result == """# 命式
+
+- 生年月日: 平成12年1月1日 12時0分生
+- 性別: 男命
+
+| 柱 | 天干 | 支干 | 蔵干 | 十二運 | 通変(天干) | 通変(蔵干) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 年 | 己 | 卯 | 乙 | 沐 | 劫財 | 正官 |
+| 月 | 丙 | 子 | 癸 | 胎 | 偏印 | 正財 |
+| 日 | 戊 | 午 | 丁 | 帝 | 比肩 | 印綬 |
+| 時 | 戊 | 午 | 丁 | 帝 | 比肩 | 印綬 |
+
+## 大運
+
+| 開始年齢 | 干支 | 通変 |
+| --- | --- | --- |
+|  8 | 乙亥 | 正官 |
+| 18 | 甲戌 | 偏官 |
+| 28 | 癸酉 | 正財 |
+| 38 | 壬申 | 偏財 |
+| 48 | 辛未 | 傷官 |
+| 58 | 庚午 | 食神 |
+| 68 | 己巳 | 劫財 |
+| 78 | 戊辰 | 比肩 |
+| 88 | 丁卯 | 印綬 |
+| 98 | 丙寅 | 偏印 |
+
+## 年運
+
+| 年齢 | 干支 | 通変 |
+| --- | --- | --- |
+| 24 | 甲辰 | 偏官 |
+| 25 | 乙巳 | 正官 |
+| 26 | 丙午 | 偏印 |
+| 27 | 丁未 | 印綬 |
+| 28 | 戊申 | 比肩 |
+| 29 | 己酉 | 劫財 |
+| 30 | 庚戌 | 食神 |
+| 31 | 辛亥 | 傷官 |
+| 32 | 壬子 | 偏財 |
+| 33 | 癸丑 | 正財 |"""
 
 
 def test_output_stdio(sample, capsys):
