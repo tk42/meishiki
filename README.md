@@ -56,9 +56,11 @@ $ pip install -e .
 $ pytest --cov=meishiki ./test
 ```
 
-## TODO
+## 節入り
 
-- [ ] 節入り MCP
+- [2026 年](https://eco.mtk.nao.ac.jp/koyomi/yoko/2026/rekiyou262.html)
+
+## TODO
 
 - [ ] 逆引きテーブル作成
 
