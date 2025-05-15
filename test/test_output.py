@@ -975,3 +975,40 @@ def test_output_stdio(sample, capsys):
 2118年（令和100年）| 118歳 | 戊寅 (比肩) |  干合, 火半会
 2119年（令和101年）| 119歳 | 己卯 (劫財) |  干合, 刑
 """
+
+
+def test_output_content_without_unsei(sample):
+    meishi, unsei = sample
+    result = output_content(meishi)
+    # 基本キーのみ存在し、unsei由来のキーは含まれない
+    assert 'birthday' in result
+    assert 'sex' in result
+    assert 'p1' not in result
+    assert 'd_tsuhen1' not in result
+    assert 'n1' not in result
+
+
+def test_output_markdown_without_unsei_table_true(sample):
+    meishi, unsei = sample
+    md = output_markdown(meishi, table=True)
+    # ヘッダーと命式表が含まれ、年運セクションはない
+    assert '# 命式' in md
+    assert '## 年運' not in md
+
+
+def test_output_html_without_unsei(sample):
+    meishi, unsei = sample
+    res1 = output_html(meishi, save=False)
+    res2 = output_html(meishi, None, save=False)
+    # unsei 指定ありなしで結果が同じ
+    assert res1 == res2
+
+
+def test_output_stdio_without_unsei(sample, capsys):
+    meishi, unsei = sample
+    # unsei を省略
+    output_stdio(meishi)
+    out = capsys.readouterr().out
+    # meishiki 部分のみ出力され、年運は含まれない
+    assert '＜五行＞' in out
+    assert '年運' not in out

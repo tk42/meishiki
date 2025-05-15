@@ -169,7 +169,7 @@ def output_content(meishiki: Meishiki, unsei: Unsei = None) -> dict:
     return content
 
 
-def output_html(meishiki: Meishiki, unsei: Unsei, template=TemplateType.TYPE_I, save=True):
+def output_html(meishiki: Meishiki, unsei: Unsei = None, template=TemplateType.TYPE_I, save=True):
     content = output_content(meishiki, unsei)
     env = Environment(loader=FileSystemLoader(""))
     template = env.get_template(base_dir + str(template.value))
@@ -181,7 +181,7 @@ def output_html(meishiki: Meishiki, unsei: Unsei, template=TemplateType.TYPE_I, 
     return result
 
 
-def output_markdown(meishiki: Meishiki, unsei: Unsei=None, table=False) -> str:
+def output_markdown(meishiki: Meishiki, unsei: Unsei = None, table=False) -> str:
     """
     meishikiとunseiからMarkdown形式で命式・大運・年運を生成します。
     """
@@ -374,7 +374,7 @@ def output_markdown(meishiki: Meishiki, unsei: Unsei=None, table=False) -> str:
     return "\n".join(lines)
 
 
-def output_stdio(meishiki: Meishiki, unsei: Unsei):
+def output_stdio(meishiki: Meishiki, unsei: Unsei = None):
 
     print("＜五行＞")
     for i, g in enumerate(meishiki.gogyo):
@@ -495,6 +495,9 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei):
             print("陽刃")
         if meishiki.kaigou:
             print("魁罡")
+
+    if unsei is None:
+        return
 
     daiun = unsei.daiun
     nenun = unsei.nenun
