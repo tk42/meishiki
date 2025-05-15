@@ -11,13 +11,14 @@ base_dir = "./template/"
 output_dir = "./output/"
 
 
-def output_content(meishiki: Meishiki, unsei: Unsei):
+def output_content(meishiki: Meishiki, unsei: Unsei = None) -> dict:
     wareki = convert_to_wareki(meishiki.birthday)
     birthday_str = meishiki.birthday.strftime(f"{wareki}%-m月%-d日 %-H時%-M分生")
     sex_str = "男命" if meishiki.sex == Sex.MALE else "女命"
 
-    daiun = unsei.daiun
-    nenun = unsei.nenun
+    if unsei is not None:
+        daiun = unsei.daiun
+        nenun = unsei.nenun
 
     content = {
         "birthday": birthday_str,
@@ -55,114 +56,115 @@ def output_content(meishiki: Meishiki, unsei: Unsei):
         "sui": meishiki.gogyo[4],
     }
 
-    p1 = " " + str(daiun[0][0]) if len(str(daiun[0][0])) == 1 else str(daiun[0][0])
-    d_nen = {
-        "p1": p1,
-        "p2": daiun[1][0],
-        "p3": daiun[2][0],
-        "p4": daiun[3][0],
-        "p5": daiun[4][0],
-        "p6": daiun[5][0],
-        "p7": daiun[6][0],
-        "p8": daiun[7][0],
-        "p9": daiun[8][0],
-        "p10": daiun[9][0],
-        "p11": daiun[10][0],
-        "d_tsuhen1": kd.tsuhen[daiun[0][3]],
-        "d_kan1": kd.kan[daiun[0][1]],
-        "d_shi1": kd.shi[daiun[0][2]],
-        "d_tsuhen2": kd.tsuhen[daiun[1][3]],
-        "d_kan2": kd.kan[daiun[1][1]],
-        "d_shi2": kd.shi[daiun[1][2]],
-        "d_tsuhen3": kd.tsuhen[daiun[2][3]],
-        "d_kan3": kd.kan[daiun[2][1]],
-        "d_shi3": kd.shi[daiun[2][2]],
-        "d_tsuhen4": kd.tsuhen[daiun[3][3]],
-        "d_kan4": kd.kan[daiun[3][1]],
-        "d_shi4": kd.shi[daiun[3][2]],
-        "d_tsuhen5": kd.tsuhen[daiun[4][3]],
-        "d_kan5": kd.kan[daiun[4][1]],
-        "d_shi5": kd.shi[daiun[4][2]],
-        "d_tsuhen6": kd.tsuhen[daiun[5][3]],
-        "d_kan6": kd.kan[daiun[5][1]],
-        "d_shi6": kd.shi[daiun[5][2]],
-        "d_tsuhen7": kd.tsuhen[daiun[6][3]],
-        "d_kan7": kd.kan[daiun[6][1]],
-        "d_shi7": kd.shi[daiun[6][2]],
-        "d_tsuhen8": kd.tsuhen[daiun[7][3]],
-        "d_kan8": kd.kan[daiun[7][1]],
-        "d_shi8": kd.shi[daiun[7][2]],
-        "d_tsuhen9": kd.tsuhen[daiun[8][3]],
-        "d_kan9": kd.kan[daiun[8][1]],
-        "d_shi9": kd.shi[daiun[8][2]],
-        "d_tsuhen10": kd.tsuhen[daiun[9][3]],
-        "d_kan10": kd.kan[daiun[9][1]],
-        "d_shi10": kd.shi[daiun[9][2]],
-    }
-
-    content.update(d_nen)
-
-    age = dt.today().year - meishiki.birthday.year
-    for i, n in enumerate(nenun):
-        if age == n[0]:
-            break
-        n1 = " " + str(nenun[i][0]) if len(str(nenun[i][0])) == 1 else str(nenun[i][0])
-        n2 = " " + str(nenun[i + 1][0]) if len(str(nenun[i + 1][0])) == 1 else str(nenun[i + 1][0])
-        n3 = " " + str(nenun[i + 2][0]) if len(str(nenun[i + 2][0])) == 1 else str(nenun[i + 2][0])
-        n4 = " " + str(nenun[i + 3][0]) if len(str(nenun[i + 3][0])) == 1 else str(nenun[i + 3][0])
-        n5 = " " + str(nenun[i + 4][0]) if len(str(nenun[i + 4][0])) == 1 else str(nenun[i + 4][0])
-        n6 = " " + str(nenun[i + 5][0]) if len(str(nenun[i + 5][0])) == 1 else str(nenun[i + 5][0])
-        n7 = " " + str(nenun[i + 6][0]) if len(str(nenun[i + 6][0])) == 1 else str(nenun[i + 6][0])
-        n8 = " " + str(nenun[i + 7][0]) if len(str(nenun[i + 7][0])) == 1 else str(nenun[i + 7][0])
-        n9 = " " + str(nenun[i + 8][0]) if len(str(nenun[i + 8][0])) == 1 else str(nenun[i + 8][0])
-        n10 = " " + str(nenun[i + 9][0]) if len(str(nenun[i + 9][0])) == 1 else str(nenun[i + 9][0])
-        n11 = " " + str(nenun[i + 10][0]) if len(str(nenun[i + 10][0])) == 1 else str(nenun[i + 10][0])
-
-        n_nen = {
-            "n1": n1,
-            "n2": n2,
-            "n3": n3,
-            "n4": n4,
-            "n5": n5,
-            "n6": n6,
-            "n7": n7,
-            "n8": n8,
-            "n9": n9,
-            "n10": n10,
-            "n11": n11,
-            "n_tsuhen1": kd.tsuhen[nenun[i][3]],
-            "n_kan1": kd.kan[nenun[i][1]],
-            "n_shi1": kd.shi[nenun[i][2]],
-            "n_tsuhen2": kd.tsuhen[nenun[i + 1][3]],
-            "n_kan2": kd.kan[nenun[i + 1][1]],
-            "n_shi2": kd.shi[nenun[i + 1][2]],
-            "n_tsuhen3": kd.tsuhen[nenun[i + 2][3]],
-            "n_kan3": kd.kan[nenun[i + 2][1]],
-            "n_shi3": kd.shi[nenun[i + 2][2]],
-            "n_tsuhen4": kd.tsuhen[nenun[i + 3][3]],
-            "n_kan4": kd.kan[nenun[i + 3][1]],
-            "n_shi4": kd.shi[nenun[i + 3][2]],
-            "n_tsuhen5": kd.tsuhen[nenun[i + 4][3]],
-            "n_kan5": kd.kan[nenun[i + 4][1]],
-            "n_shi5": kd.shi[nenun[i + 4][2]],
-            "n_tsuhen6": kd.tsuhen[nenun[i + 5][3]],
-            "n_kan6": kd.kan[nenun[i + 5][1]],
-            "n_shi6": kd.shi[nenun[i + 5][2]],
-            "n_tsuhen7": kd.tsuhen[nenun[i + 6][3]],
-            "n_kan7": kd.kan[nenun[i + 6][1]],
-            "n_shi7": kd.shi[nenun[i + 6][2]],
-            "n_tsuhen8": kd.tsuhen[nenun[i + 7][3]],
-            "n_kan8": kd.kan[nenun[i + 7][1]],
-            "n_shi8": kd.shi[nenun[i + 7][2]],
-            "n_tsuhen9": kd.tsuhen[nenun[i + 8][3]],
-            "n_kan9": kd.kan[nenun[i + 8][1]],
-            "n_shi9": kd.shi[nenun[i + 8][2]],
-            "n_tsuhen10": kd.tsuhen[nenun[i + 9][3]],
-            "n_kan10": kd.kan[nenun[i + 9][1]],
-            "n_shi10": kd.shi[nenun[i + 9][2]],
+    if unsei is not None:
+        p1 = " " + str(daiun[0][0]) if len(str(daiun[0][0])) == 1 else str(daiun[0][0])
+        d_nen = {
+            "p1": p1,
+            "p2": daiun[1][0],
+            "p3": daiun[2][0],
+            "p4": daiun[3][0],
+            "p5": daiun[4][0],
+            "p6": daiun[5][0],
+            "p7": daiun[6][0],
+            "p8": daiun[7][0],
+            "p9": daiun[8][0],
+            "p10": daiun[9][0],
+            "p11": daiun[10][0],
+            "d_tsuhen1": kd.tsuhen[daiun[0][3]],
+            "d_kan1": kd.kan[daiun[0][1]],
+            "d_shi1": kd.shi[daiun[0][2]],
+            "d_tsuhen2": kd.tsuhen[daiun[1][3]],
+            "d_kan2": kd.kan[daiun[1][1]],
+            "d_shi2": kd.shi[daiun[1][2]],
+            "d_tsuhen3": kd.tsuhen[daiun[2][3]],
+            "d_kan3": kd.kan[daiun[2][1]],
+            "d_shi3": kd.shi[daiun[2][2]],
+            "d_tsuhen4": kd.tsuhen[daiun[3][3]],
+            "d_kan4": kd.kan[daiun[3][1]],
+            "d_shi4": kd.shi[daiun[3][2]],
+            "d_tsuhen5": kd.tsuhen[daiun[4][3]],
+            "d_kan5": kd.kan[daiun[4][1]],
+            "d_shi5": kd.shi[daiun[4][2]],
+            "d_tsuhen6": kd.tsuhen[daiun[5][3]],
+            "d_kan6": kd.kan[daiun[5][1]],
+            "d_shi6": kd.shi[daiun[5][2]],
+            "d_tsuhen7": kd.tsuhen[daiun[6][3]],
+            "d_kan7": kd.kan[daiun[6][1]],
+            "d_shi7": kd.shi[daiun[6][2]],
+            "d_tsuhen8": kd.tsuhen[daiun[7][3]],
+            "d_kan8": kd.kan[daiun[7][1]],
+            "d_shi8": kd.shi[daiun[7][2]],
+            "d_tsuhen9": kd.tsuhen[daiun[8][3]],
+            "d_kan9": kd.kan[daiun[8][1]],
+            "d_shi9": kd.shi[daiun[8][2]],
+            "d_tsuhen10": kd.tsuhen[daiun[9][3]],
+            "d_kan10": kd.kan[daiun[9][1]],
+            "d_shi10": kd.shi[daiun[9][2]],
         }
 
-        content.update(n_nen)
+        content.update(d_nen)
+
+        age = dt.today().year - meishiki.birthday.year
+        for i, n in enumerate(nenun):
+            if age == n[0]:
+                break
+            n1 = " " + str(nenun[i][0]) if len(str(nenun[i][0])) == 1 else str(nenun[i][0])
+            n2 = " " + str(nenun[i + 1][0]) if len(str(nenun[i + 1][0])) == 1 else str(nenun[i + 1][0])
+            n3 = " " + str(nenun[i + 2][0]) if len(str(nenun[i + 2][0])) == 1 else str(nenun[i + 2][0])
+            n4 = " " + str(nenun[i + 3][0]) if len(str(nenun[i + 3][0])) == 1 else str(nenun[i + 3][0])
+            n5 = " " + str(nenun[i + 4][0]) if len(str(nenun[i + 4][0])) == 1 else str(nenun[i + 4][0])
+            n6 = " " + str(nenun[i + 5][0]) if len(str(nenun[i + 5][0])) == 1 else str(nenun[i + 5][0])
+            n7 = " " + str(nenun[i + 6][0]) if len(str(nenun[i + 6][0])) == 1 else str(nenun[i + 6][0])
+            n8 = " " + str(nenun[i + 7][0]) if len(str(nenun[i + 7][0])) == 1 else str(nenun[i + 7][0])
+            n9 = " " + str(nenun[i + 8][0]) if len(str(nenun[i + 8][0])) == 1 else str(nenun[i + 8][0])
+            n10 = " " + str(nenun[i + 9][0]) if len(str(nenun[i + 9][0])) == 1 else str(nenun[i + 9][0])
+            n11 = " " + str(nenun[i + 10][0]) if len(str(nenun[i + 10][0])) == 1 else str(nenun[i + 10][0])
+
+            n_nen = {
+                "n1": n1,
+                "n2": n2,
+                "n3": n3,
+                "n4": n4,
+                "n5": n5,
+                "n6": n6,
+                "n7": n7,
+                "n8": n8,
+                "n9": n9,
+                "n10": n10,
+                "n11": n11,
+                "n_tsuhen1": kd.tsuhen[nenun[i][3]],
+                "n_kan1": kd.kan[nenun[i][1]],
+                "n_shi1": kd.shi[nenun[i][2]],
+                "n_tsuhen2": kd.tsuhen[nenun[i + 1][3]],
+                "n_kan2": kd.kan[nenun[i + 1][1]],
+                "n_shi2": kd.shi[nenun[i + 1][2]],
+                "n_tsuhen3": kd.tsuhen[nenun[i + 2][3]],
+                "n_kan3": kd.kan[nenun[i + 2][1]],
+                "n_shi3": kd.shi[nenun[i + 2][2]],
+                "n_tsuhen4": kd.tsuhen[nenun[i + 3][3]],
+                "n_kan4": kd.kan[nenun[i + 3][1]],
+                "n_shi4": kd.shi[nenun[i + 3][2]],
+                "n_tsuhen5": kd.tsuhen[nenun[i + 4][3]],
+                "n_kan5": kd.kan[nenun[i + 4][1]],
+                "n_shi5": kd.shi[nenun[i + 4][2]],
+                "n_tsuhen6": kd.tsuhen[nenun[i + 5][3]],
+                "n_kan6": kd.kan[nenun[i + 5][1]],
+                "n_shi6": kd.shi[nenun[i + 5][2]],
+                "n_tsuhen7": kd.tsuhen[nenun[i + 6][3]],
+                "n_kan7": kd.kan[nenun[i + 6][1]],
+                "n_shi7": kd.shi[nenun[i + 6][2]],
+                "n_tsuhen8": kd.tsuhen[nenun[i + 7][3]],
+                "n_kan8": kd.kan[nenun[i + 7][1]],
+                "n_shi8": kd.shi[nenun[i + 7][2]],
+                "n_tsuhen9": kd.tsuhen[nenun[i + 8][3]],
+                "n_kan9": kd.kan[nenun[i + 8][1]],
+                "n_shi9": kd.shi[nenun[i + 8][2]],
+                "n_tsuhen10": kd.tsuhen[nenun[i + 9][3]],
+                "n_kan10": kd.kan[nenun[i + 9][1]],
+                "n_shi10": kd.shi[nenun[i + 9][2]],
+            }
+
+            content.update(n_nen)
 
     return content
 
@@ -179,7 +181,7 @@ def output_html(meishiki: Meishiki, unsei: Unsei, template=TemplateType.TYPE_I, 
     return result
 
 
-def output_markdown(meishiki: Meishiki, unsei: Unsei, table=False) -> str:
+def output_markdown(meishiki: Meishiki, unsei: Unsei=None, table=False) -> str:
     """
     meishikiとunseiからMarkdown形式で命式・大運・年運を生成します。
     """
@@ -314,6 +316,9 @@ def output_markdown(meishiki: Meishiki, unsei: Unsei, table=False) -> str:
             lines.append("- 魁罡")
 
     # 年運
+    if unsei is None:
+        return "\n".join(lines)
+
     lines.append("")
     lines.append("## 年運")
     daiun = unsei.daiun
