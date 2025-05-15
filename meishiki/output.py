@@ -179,7 +179,7 @@ def output_html(meishiki: Meishiki, unsei: Unsei, template=TemplateType.TYPE_I, 
     return result
 
 
-def output_markdown(meishiki: Meishiki, unsei: Unsei) -> str:
+def output_markdown(meishiki: Meishiki, unsei: Unsei, table=False) -> str:
     """
     meishikiとunseiからMarkdown形式で命式・大運・年運を生成します。
     """
@@ -191,19 +191,33 @@ def output_markdown(meishiki: Meishiki, unsei: Unsei) -> str:
     lines.append(f"- 生年月日: {content['birthday']}")
     lines.append(f"- 性別: {content['sex']}")
     lines.append("")
-    lines.append("| 柱 | 天干 | 支干 | 蔵干 | 十二運 | 通変(天干) | 通変(蔵干) |")
-    lines.append("| --- | --- | --- | --- | --- | --- | --- |")
-    pillars = ["年", "月", "日", "時"]
-    for i, p in enumerate(pillars, start=1):
-        t = content[f"tenkan{i}"]
-        s = content[f"chishi{i}"]
-        z = content[f"zokan{i}"]
-        ftn = content[f"fortune{i}"]
-        ts_t = content[f"tsuhen_tenkan{i}"]
-        ts_z = content[f"tsuhen_zokan{i}"]
-        lines.append(f"| {p} | {t} | {s} | {z} | {ftn} | {ts_t} | {ts_z} |")
 
-    lines.append("")
+    pillars = ["年", "月", "日", "時"]
+    
+    if table:
+        lines.append("| 柱 | 天干 | 支干 | 蔵干 | 十二運 | 通変(天干) | 通変(蔵干) |")
+        lines.append("| --- | --- | --- | --- | --- | --- | --- |")
+        for i, p in enumerate(pillars, start=1):
+            t = content[f"tenkan{i}"]
+            s = content[f"chishi{i}"]
+            z = content[f"zokan{i}"]
+            ftn = content[f"fortune{i}"]
+            ts_t = content[f"tsuhen_tenkan{i}"]
+            ts_z = content[f"tsuhen_zokan{i}"]
+            lines.append(f"| {p} | {t} | {s} | {z} | {ftn} | {ts_t} | {ts_z} |")
+        lines.append("")
+    else:
+        for i, p in enumerate(pillars, start=1):
+            lines.append(f"## {p}柱")
+            lines.append(f" - 天干: {content[f'tenkan{i}']}")
+            lines.append(f" - 支干: {content[f'chishi{i}']}")
+            lines.append(f" - 蔵干: {content[f'zokan{i}']}")
+            lines.append(f" - 十二運: {content[f'fortune{i}']}")
+            lines.append(f" - 通変(天干): {content[f'tsuhen_tenkan{i}']}")
+            lines.append(f" - 通変(蔵干): {content[f'tsuhen_zokan{i}']}")
+            lines.append("")
+
+    lines.append("# 概要")
     lines.append("## 五行")
     for i, g in enumerate(meishiki.gogyo):
         lines.append(f"- {kd.gogyo[i]}: {g}")
