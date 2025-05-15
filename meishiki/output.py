@@ -202,28 +202,156 @@ def output_markdown(meishiki: Meishiki, unsei: Unsei) -> str:
         ts_t = content[f"tsuhen_tenkan{i}"]
         ts_z = content[f"tsuhen_zokan{i}"]
         lines.append(f"| {p} | {t} | {s} | {z} | {ftn} | {ts_t} | {ts_z} |")
+
     lines.append("")
-    # 大運表
-    lines.append("## 大運")
+    lines.append("## 五行")
+    for i, g in enumerate(meishiki.gogyo):
+        lines.append(f"- {kd.gogyo[i]}: {g}")
     lines.append("")
-    lines.append("| 開始年齢 | 干支 | 通変 |")
-    lines.append("| --- | --- | --- |")
-    for i in range(1, 11):
-        age = content[f"p{i}"]
-        dk = content[f"d_kan{i}"] + content[f"d_shi{i}"]
-        dts = content[f"d_tsuhen{i}"]
-        lines.append(f"| {age} | {dk} | {dts} |")
+    lines.append("## 陰陽のバランス")
+    lines.append(f"- 陰: {meishiki.inyo[1]}")
+    lines.append(f"- 陽: {meishiki.inyo[0]}")
     lines.append("")
-    # 年運表
+    lines.append("## 月令")
+    lines.append(f"- {kd.getsurei[meishiki.getsurei]}")
+    lines.append("")
+    lines.append("## 干合")
+    if not meishiki.kango:
+        lines.append("- 干合なし")
+    else:
+        for kango in meishiki.kango:
+            b1 = kd.kango_chu[kango[0][1]]
+            k1 = kd.kan[kango[0][0]]
+            b2 = kd.kango_chu[kango[1][1]]
+            k2 = kd.kan[kango[1][0]]
+            lines.append(f"- {b1} の「{k1}」と {b2} の「{k2}」が干合")
+    lines.append("")
+    lines.append("## 支合")
+    if not meishiki.shigo:
+        lines.append("- 支合なし")
+    else:
+        for shigo in meishiki.shigo:
+            b1 = kd.shigo_chu[shigo[0][1]]
+            k1 = kd.shi[shigo[0][0]]
+            b2 = kd.shigo_chu[shigo[1][1]]
+            k2 = kd.shi[shigo[1][0]]
+            lines.append(f"- {b1} の「{k1}」と {b2} の「{k2}」が支合")
+    lines.append("")
+    lines.append("## 三合会局")
+    if not meishiki.sango:
+        lines.append("- 三合会局なし")
+    else:
+        for places, fortune, _ in meishiki.sango:
+            lines.append(f"- {kd.shi[places[0]]}, {kd.shi[places[1]]}, {kd.shi[places[2]]} の三合{kd.gogyo[fortune]}局")
+    lines.append("")
+    lines.append("## 半会")
+    if not meishiki.hankai:
+        lines.append("- 半会なし")
+    else:
+        for h in meishiki.hankai:
+            lines.append(f"- {kd.shi[h[0][0]]}, {kd.shi[h[0][1]]} が {kd.gogyo[h[2]]} 半会")
+    lines.append("")
+    lines.append("## 方合")
+    if not meishiki.hogo:
+        lines.append("- 方合なし")
+    else:
+        for places, fortune in meishiki.hogo:
+            lines.append(f"- {kd.shi[places[0]]}, {kd.shi[places[1]]}, {kd.shi[places[2]]} で {kd.gogyo[fortune]} 方合")
+    lines.append("")
+    lines.append("## 空亡")
+    lines.append(f"- {kd.shi[meishiki.kubo[0]]}{kd.shi[meishiki.kubo[1]]}")
+    lines.append("")
+    lines.append("## 七冲")
+    if not meishiki.hitsuchu:
+        lines.append("- 七冲なし")
+    else:
+        for (d1, i1), (d2, i2) in meishiki.hitsuchu:
+            lines.append(f"- {kd.shigo_chu[i1]} の「{kd.shi[d1]}」が {kd.shigo_chu[i2]} の「{kd.shi[d2]}」を冲する")
+    lines.append("")
+    lines.append("## 刑")
+    if not meishiki.kei:
+        lines.append("- 刑なし")
+    else:
+        for (c1, p1), (c2, p2) in meishiki.kei:
+            b1 = kd.shigo_chu[p1]
+            k1 = kd.shi[c1]
+            b2 = kd.shigo_chu[p2]
+            k2 = kd.shi[c2]
+            lines.append(f"- {b1} の「{k1}」が {b2} の「{k2}」を刑する")
+    lines.append("")
+    lines.append("## 害")
+    if not meishiki.gai:
+        lines.append("- 害なし")
+    else:
+        for (c1, p1), (c2, p2) in meishiki.gai:
+            b1 = kd.shigo_chu[p1]
+            k1 = kd.shi[c1]
+            b2 = kd.shigo_chu[p2]
+            k2 = kd.shi[c2]
+            lines.append(f"- {b1} の「{k1}」と {b2} の「{k2}」とが害")
+    lines.append("")
+    lines.append("## 特記")
+    if not meishiki.youjin and not meishiki.kaigou:
+        lines.append("- 特記なし")
+    else:
+        if meishiki.youjin:
+            lines.append("- 陽刃")
+        if meishiki.kaigou:
+            lines.append("- 魁罡")
+
+    # 年運
+    lines.append("")
     lines.append("## 年運")
-    lines.append("")
-    lines.append("| 年齢 | 干支 | 通変 |")
-    lines.append("| --- | --- | --- |")
-    for i in range(1, 11):
-        age = content[f"n{i}"]
-        nk = content[f"n_kan{i}"] + content[f"n_shi{i}"]
-        nts = content[f"n_tsuhen{i}"]
-        lines.append(f"| {age} | {nk} | {nts} |")
+    daiun = unsei.daiun
+    nenun = unsei.nenun
+    ry = daiun[0][0]
+    d_idx = 0
+    year = meishiki.birthday.year + ry
+    for n, nen in enumerate(nenun):
+        # 大運インデックス更新
+        if (ry == 10) and (nen[0] != ry) and (nen[0] % 10 == 0):
+            d_idx += 1
+        if (ry != 10) and (nen[0] != ry) and (nen[0] % 10 == ry):
+            d_idx += 1
+        # 大運詳細
+        if nen[0] == daiun[d_idx][0]:
+            d_kan = kd.kan[daiun[d_idx][1]]
+            d_shi = kd.shi[daiun[d_idx][2]]
+            d_tsuhen = kd.tsuhen[daiun[d_idx][3]]
+            cont = f"{d_kan}{d_shi} ({d_tsuhen})："
+            if daiun[d_idx][4] != -1: cont += " 干合,"
+            if daiun[d_idx][5] != -1: cont += " 支合,"
+            if daiun[d_idx][6] != -1: cont += f" {kd.gogyo[kd.hogo[daiun[d_idx][6]][1]]}方合,"
+            if daiun[d_idx][7] != -1: cont += f" 三合{kd.gogyo[kd.sango[daiun[d_idx][7]][1]]}局,"
+            if daiun[d_idx][8] != -1: cont += f" {kd.gogyo[kd.hankai[daiun[d_idx][8]][2]]}半会,"
+            if daiun[d_idx][9] != -1: cont += " 天戦地冲,"
+            if daiun[d_idx][10] != -1: cont += " 冲,"
+            if daiun[d_idx][11] != -1: cont += " 刑,"
+            if daiun[d_idx][12] != -1: cont += " 害,"
+            cont = cont.rstrip(',')
+            lines.append("------")
+            lines.append(cont)
+        # 年運詳細
+        wareki = convert_to_wareki(dt(year=year, month=meishiki.birthday.month, day=meishiki.birthday.day))
+        age_raw = nen[0]
+        age = f"{age_raw:>2}"
+        cont = f"{year}年（{wareki}）| {age}歳 | {kd.kan[nen[1]]}{kd.shi[nen[2]]} ({kd.tsuhen[nen[3]]})"
+        extras = []
+        if nen[4]  != -1: extras.append("干合")
+        if nen[5]  != -1: extras.append("支合")
+        if nen[6]  != -1: extras.append(f"{kd.gogyo[kd.hogo[nen[6]][1]]}方合")
+        if nen[7]  != -1: extras.append(f"三合{kd.gogyo[kd.sango[nen[7]][1]]}局")
+        if nen[8]  != -1: extras.append(f"{kd.gogyo[kd.hankai[nen[8]][2]]}半会")
+        if nen[9]  != -1: extras.append("天戦地冲")
+        if nen[10] != -1: extras.append("冲")
+        if nen[11] != -1: extras.append("刑")
+        if nen[12] != -1: extras.append("害")
+        if nen[13] != -1: extras.append("官殺混雑")
+        if extras:
+            cont += " | " + ", ".join(extras)
+        lines.append(cont)
+        year += 1
+
     return "\n".join(lines)
 
 
