@@ -17,12 +17,16 @@ from meishiki.meishiki import build_meishiki
 
 
 class TestUnseiMethods:
+    # setsuiri が正しく判定されることを確認する
+    # setsuiri を更新したら、このテストも更新する
     def test_convert_year_ratio(self):
-        assert convert_year_ratio(datetime(1926, 1, 6, 10, 55)) == [-11800, 0]
+        assert convert_year_ratio(datetime(1926, 1, 6, 10, 55)) == [-12287, 0]
         assert convert_year_ratio(datetime(1926, 1, 6, 10, 56)) == [0, 10]
         assert convert_year_ratio(datetime(2022, 12, 7, 12, 46)) == [10, 0]
+        assert convert_year_ratio(datetime(2026, 12, 7, 11, 53)) == [10, 0]
         with pytest.raises(IndexError):
-            convert_year_ratio(datetime(2022, 12, 7, 12, 47))
+            # 「現在の節入り日」を過ぎた日時を渡すと、IndexError が発生することを確認する
+            convert_year_ratio(datetime(2026, 12, 7, 11, 54))
 
     @pytest.mark.parametrize("sex,y_kan,expected", [
         (Sex.MALE, 0, 1),
