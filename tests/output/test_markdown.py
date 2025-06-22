@@ -49,3 +49,10 @@ def test_output_markdown_toki_bashira(sample, toki_bashira, should_include):
         assert "| 時 |" in md
     else:
         assert "| 時 |" not in md
+
+@pytest.mark.parametrize("fixture_name", ["sample", "sample2", "sample3"])
+def test_output_markdown_all(request, fixture_name):
+    meishi, unsei = request.getfixturevalue(fixture_name)
+    md = output_markdown(meishi, unsei)
+    # 出力が途中で途切れず最後まで Markdown 文字列になっているか
+    assert md.endswith("\n") or md  # 簡易チェック

@@ -292,33 +292,21 @@ def append_shigo(chishi):
 
 
 def append_hogo(chishi):
-
-    # ＜機能＞
-    # 方合を命式に追加する
-    # ＜入力＞
-    #   - 地支
-    # ＜出力＞
-    #   - 方合のリスト
-
-    for i, h in enumerate(kd.hogo):
+    hogo_list = []
+    for h in kd.hogo:
+        # 方合の 3 支がすべて命式に含まれているか判定
         if (h[0][0] in chishi) and (h[0][1] in chishi) and (h[0][2] in chishi):
-            return kd.hogo[i]
-    return []
+            hogo_list.append(h)
+    return hogo_list
 
 
 def append_sango(chishi):
-
-    # ＜機能＞
-    # 三合を命式に追加する
-    # ＜入力＞
-    #   - 地支
-    # ＜出力＞
-    #   - 三合のリスト
-
-    for i, s in enumerate(kd.sango):
+    sangos = []
+    for s in kd.sango:
+        # 三合の 3 支がすべて命式に含まれているか判定
         if (s[0][0] in chishi) and (s[0][1] in chishi) and (s[0][2] in chishi):
-            return kd.sango[i]
-    return []
+            sangos.append(s)
+    return sangos
 
 
 def append_hankai(chishi):
