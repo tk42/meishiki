@@ -11,7 +11,7 @@ base_dir = "./template/"
 output_dir = "./output/"
 
 
-def output_content(meishiki: Meishiki, unsei: Unsei = None) -> dict:
+def output_content(meishiki: Meishiki, unsei: Unsei = None, toki_bashira=True) -> dict:
     wareki = convert_to_wareki(meishiki.birthday)
     birthday_str = meishiki.birthday.strftime(f"{wareki}%-m月%-d日 %-H時%-M分生")
     sex_str = "男命" if meishiki.sex == Sex.MALE else "女命"
@@ -41,12 +41,6 @@ def output_content(meishiki: Meishiki, unsei: Unsei = None) -> dict:
         "fortune3": kd.twelve_fortune[meishiki.twelve_fortune[2]],
         "tsuhen_tenkan3": kd.tsuhen[meishiki.tsuhen[2]],
         "tsuhen_zokan3": kd.tsuhen[meishiki.tsuhen[6]],
-        "tenkan4": kd.kan[meishiki.tenkan[3]],
-        "chishi4": kd.shi[meishiki.chishi[3]],
-        "zokan4": kd.kan[meishiki.zokan[3]],
-        "fortune4": kd.twelve_fortune[meishiki.twelve_fortune[3]],
-        "tsuhen_tenkan4": kd.tsuhen[meishiki.tsuhen[3]],
-        "tsuhen_zokan4": kd.tsuhen[meishiki.tsuhen[7]],
         "choko": meishiki.choko,
         "kubo": kd.shi[meishiki.kubo[0]] + kd.shi[meishiki.kubo[1]],
         "moku": meishiki.gogyo[0],
@@ -55,6 +49,16 @@ def output_content(meishiki: Meishiki, unsei: Unsei = None) -> dict:
         "gon": meishiki.gogyo[3],
         "sui": meishiki.gogyo[4],
     }
+    
+    if toki_bashira:
+        content.update({
+            "tenkan4": kd.kan[meishiki.tenkan[3]],
+            "chishi4": kd.shi[meishiki.chishi[3]],
+            "zokan4": kd.kan[meishiki.zokan[3]],
+            "fortune4": kd.twelve_fortune[meishiki.twelve_fortune[3]],
+            "tsuhen_tenkan4": kd.tsuhen[meishiki.tsuhen[3]],
+            "tsuhen_zokan4": kd.tsuhen[meishiki.tsuhen[7]],
+        })
 
     if unsei is not None:
         p1 = " " + str(daiun[0][0]) if len(str(daiun[0][0])) == 1 else str(daiun[0][0])
@@ -181,7 +185,7 @@ def output_html(meishiki: Meishiki, unsei: Unsei = None, template=TemplateType.T
     return result
 
 
-def output_markdown(meishiki: Meishiki, unsei: Unsei = None, table=False) -> str:
+def output_markdown(meishiki: Meishiki, unsei: Unsei = None, table=False, toki_bashira=True) -> str:
     """
     meishikiとunseiからMarkdown形式で命式・大運・年運を生成します。
     """
@@ -194,7 +198,7 @@ def output_markdown(meishiki: Meishiki, unsei: Unsei = None, table=False) -> str
     lines.append(f"- 性別: {content['sex']}")
     lines.append("")
 
-    pillars = ["年", "月", "日", "時"]
+    pillars = ["年", "月", "日"] + (["時"] if toki_bashira else [])
     
     if table:
         lines.append("| 柱 | 天干 | 支干 | 蔵干 | 十二運 | 通変(天干) | 通変(蔵干) |")

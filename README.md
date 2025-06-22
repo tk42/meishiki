@@ -51,9 +51,17 @@ and add the following to your ClaudeDesktop config file:
 
 ## Run tests
 
+### Test all
+
 ```bash
 $ pip install -e .
-$ pytest --cov=meishiki ./test
+$ pytest --cov=meishiki ./tests
+```
+
+### Test specific
+
+```bash
+pytest -s tests/output/test_html.py::test_output_html_basic
 ```
 
 ## 節入り
