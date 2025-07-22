@@ -43,6 +43,7 @@ def output_content(meishiki: Meishiki, unsei: Unsei = None, toki_bashira=True) -
         "tsuhen_zokan3": kd.tsuhen[meishiki.tsuhen[6]],
         "choko": meishiki.choko,
         "kubo": kd.shi[meishiki.kubo[0]] + kd.shi[meishiki.kubo[1]],
+        "naion": kd.naion[meishiki.naion],
         "moku": meishiki.gogyo[0],
         "ka": meishiki.gogyo[1],
         "do": meishiki.gogyo[2],

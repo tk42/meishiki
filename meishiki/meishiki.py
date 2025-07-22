@@ -38,6 +38,8 @@ class Meishiki:
     tsuhen: List[int] = field(default_factory=list)
     twelve_fortune: List[int] = field(default_factory=list)
 
+    naion: int = 0
+
     kango: List[KangoType] = field(default_factory=list)
     shigo: List[ShigoType] = field(default_factory=list)
     hogo: List[HogoType] = field(default_factory=list)
@@ -252,6 +254,30 @@ def append_getsurei(d_kan, m_shi):
         return 1
     if m_shi in kd.getsurei_sou[d_kan]:
         return 2
+    return 0
+
+
+def calculate_naion(tenkan_idx, chishi_idx):
+    """
+    Calculate naion (納音) from tenkan and chishi indices.
+    
+    Args:
+        tenkan_idx (int): Tenkan index (0-9)
+        chishi_idx (int): Chishi index (0-11)
+    
+    Returns:
+        int: Naion index (0-29)
+    """
+    # Find the index in the sixty_kanshi array
+    kanshi_pair = [tenkan_idx, chishi_idx]
+    
+    # Search for the matching pair in sixty_kanshi
+    for i, pair in enumerate(kd.sixty_kanshi):
+        if pair == kanshi_pair:
+            # Each pair of consecutive kanshi corresponds to one naion
+            return i // 2
+    
+    # Fallback calculation if not found (should not happen with valid inputs)
     return 0
 
 
@@ -473,6 +499,9 @@ def build_meishiki(birthday: datetime, sex: Sex) -> Meishiki:
     # 十二運を得る
     twelve_fortune = [kd.twelve_table[tenkan[2]][i] for i in chishi]
 
+    # 納音を得る（日柱の干支から）
+    naion = calculate_naion(d_kan, d_shi)
+
     # 干合・支合を得る
     kango = append_kango(tenkan + zokan)
     shigo = append_shigo(chishi)
@@ -517,6 +546,7 @@ def build_meishiki(birthday: datetime, sex: Sex) -> Meishiki:
         getsurei,
         tsuhen,
         twelve_fortune,
+        naion,
         kango,
         shigo,
         hogo,
