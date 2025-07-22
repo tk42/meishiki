@@ -229,6 +229,9 @@ def output_markdown(meishiki: Meishiki, unsei: Unsei = None, table=False, toki_b
     for i, g in enumerate(meishiki.gogyo):
         lines.append(f"- {kd.gogyo[i]}: {g}")
     lines.append("")
+    lines.append("## 納音")
+    lines.append(f"- {kd.naion[meishiki.naion]}")
+    lines.append("")
     lines.append("## 陰陽のバランス")
     lines.append(f"- 陰: {meishiki.inyo[1]}")
     lines.append(f"- 陽: {meishiki.inyo[0]}")
@@ -384,6 +387,11 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei = None):
     print("＜五行＞")
     for i, g in enumerate(meishiki.gogyo):
         print(kd.gogyo[i] + "：" + str(g))
+
+    print()
+
+    print("＜納音＞")
+    print(kd.naion[meishiki.naion])
 
     print()
 

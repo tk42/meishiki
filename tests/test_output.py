@@ -274,6 +274,9 @@ def test_output_markdown_table(sample):
 - 金: 0
 - 水: 1
 
+## 納音
+- 天上火
+
 ## 陰陽のバランス
 - 陰: 2
 - 陽: 6
@@ -476,6 +479,9 @@ def test_output_markdown_table_toki_bashira(sample):
 - 土: 3
 - 金: 0
 - 水: 1
+
+## 納音
+- 天上火
 
 ## 陰陽のバランス
 - 陰: 2
@@ -706,6 +712,9 @@ def test_output_markdown_table_false(sample):
 - 金: 0
 - 水: 1
 
+## 納音
+- 天上火
+
 ## 陰陽のバランス
 - 陰: 2
 - 陽: 6
@@ -935,6 +944,9 @@ def test_output_markdown_table_false_only_meishiki(sample):
 - 金: 0
 - 水: 1
 
+## 納音
+- 天上火
+
 ## 陰陽のバランス
 - 陰: 2
 - 陽: 6
@@ -988,6 +1000,9 @@ def test_output_stdio(sample, capsys):
 土：3
 金：0
 水：1
+
+＜納音＞
+天上火
 
 ＜陰陽のバランス＞
 陰：2
