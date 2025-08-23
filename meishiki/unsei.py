@@ -4,7 +4,7 @@ from dataclasses import field, dataclass
 
 from meishiki.consts import kd, Sex
 from meishiki.errors import UnseiException
-from meishiki.meishiki import is_setsuiri, Meishiki
+from meishiki.meishiki import is_setsuiri, Meishiki, find_day_kanshi, find_month_kanshi, find_year_kanshi
 
 
 @dataclass
@@ -379,3 +379,137 @@ def build_unsei(meishiki: Meishiki) -> Unsei:
     nenun = append_nenun(meishiki, daiun)
 
     return Unsei(daiun, nenun)
+
+
+def calculate_monthly_fortune(meishiki: Meishiki, target_year: int, target_month: int) -> dict:
+    """
+    特定月の運勢を計算する
+    
+    Args:
+        meishiki: 命式データ
+        target_year: 対象年
+        target_month: 対象月
+    
+    Returns:
+        dict: 月運データ（干支、通変、相互作用など）
+    """
+    # 対象月の月柱干支を取得（節入りを考慮）
+    target_date = datetime(target_year, target_month, 15)  # 月の中旬を基準日とする
+    y_kan, y_shi = find_year_kanshi(target_date)
+    m_kan, m_shi = find_month_kanshi(target_date, y_kan)
+    
+    # 通変を計算
+    tsuhen = kd.kan_tsuhen[meishiki.nikkan].index(m_kan)
+    
+    # 命式との相互作用を分析
+    kango = is_kango(meishiki.tenkan + meishiki.zokan, m_kan)  # 干合
+    shigo = is_shigo(meishiki.chishi, m_shi)  # 支合
+    hogo = is_hogo(meishiki.chishi, m_shi)  # 方合
+    sango = is_sango(meishiki.chishi, m_shi)  # 三合
+    
+    if sango == -1:
+        hankai = is_hankai(meishiki.chishi, m_shi)  # 半会
+    else:
+        hankai = -1
+        
+    tc = is_tensen_chichu(meishiki.nitchu[1], tsuhen, m_shi)  # 天戦地冲
+    if tc == -1:
+        chu = is_chu(meishiki.chishi, m_shi)  # 冲
+    else:
+        chu = -1
+        
+    kei = is_kei(meishiki.chishi, m_shi)  # 刑
+    gai = is_gai(meishiki.chishi, m_shi)  # 害
+    
+    return {
+        'year': target_year,
+        'month': target_month,
+        'kan': m_kan,
+        'shi': m_shi,
+        'tsuhen': tsuhen,
+        'kango': kango,
+        'shigo': shigo,
+        'hogo': hogo,
+        'sango': sango,
+        'hankai': hankai,
+        'tensen_chichu': tc,
+        'chu': chu,
+        'kei': kei,
+        'gai': gai
+    }
+
+
+def calculate_daily_fortune(meishiki: Meishiki, target_date: datetime) -> dict:
+    """
+    特定日の運勢を計算する
+    
+    Args:
+        meishiki: 命式データ
+        target_date: 対象日
+    
+    Returns:
+        dict: 日運データ（干支、通変、相互作用など）
+    """
+    # 対象日の日柱干支を取得
+    d_kan, d_shi = find_day_kanshi(target_date)
+    
+    # 通変を計算
+    tsuhen = kd.kan_tsuhen[meishiki.nikkan].index(d_kan)
+    
+    # 命式との相互作用を分析
+    kango = is_kango(meishiki.tenkan + meishiki.zokan, d_kan)  # 干合
+    shigo = is_shigo(meishiki.chishi, d_shi)  # 支合
+    hogo = is_hogo(meishiki.chishi, d_shi)  # 方合
+    sango = is_sango(meishiki.chishi, d_shi)  # 三合
+    
+    if sango == -1:
+        hankai = is_hankai(meishiki.chishi, d_shi)  # 半会
+    else:
+        hankai = -1
+        
+    tc = is_tensen_chichu(meishiki.nitchu[1], tsuhen, d_shi)  # 天戦地冲
+    if tc == -1:
+        chu = is_chu(meishiki.chishi, d_shi)  # 冲
+    else:
+        chu = -1
+        
+    kei = is_kei(meishiki.chishi, d_shi)  # 刑
+    gai = is_gai(meishiki.chishi, d_shi)  # 害
+    
+    return {
+        'date': target_date,
+        'kan': d_kan,
+        'shi': d_shi,
+        'tsuhen': tsuhen,
+        'kango': kango,
+        'shigo': shigo,
+        'hogo': hogo,
+        'sango': sango,
+        'hankai': hankai,
+        'tensen_chichu': tc,
+        'chu': chu,
+        'kei': kei,
+        'gai': gai
+    }
+
+
+def calculate_weekly_fortune(meishiki: Meishiki, week_start: datetime) -> List[dict]:
+    """
+    週の運勢を計算する（7日分の日運を返す）
+    
+    Args:
+        meishiki: 命式データ
+        week_start: 週の開始日
+    
+    Returns:
+        List[dict]: 7日分の日運データのリスト
+    """
+    from datetime import timedelta
+    
+    weekly_fortune = []
+    for i in range(7):
+        target_date = week_start + timedelta(days=i)
+        daily_fortune = calculate_daily_fortune(meishiki, target_date)
+        weekly_fortune.append(daily_fortune)
+    
+    return weekly_fortune

@@ -3,7 +3,7 @@ from datetime import datetime as dt
 
 from meishiki.consts import kd, TemplateType, Sex
 from meishiki.meishiki import Meishiki
-from meishiki.unsei import Unsei
+from meishiki.unsei import Unsei, calculate_daily_fortune, calculate_weekly_fortune, calculate_monthly_fortune
 from meishiki.util import convert_to_wareki
 
 
@@ -334,6 +334,7 @@ def output_markdown(meishiki: Meishiki, unsei: Unsei = None, table=False, toki_b
     ry = daiun[0][0]
     d_idx = 0
     year = meishiki.birthday.year + ry
+
     for n, nen in enumerate(nenun):
         # 大運インデックス更新
         if (ry == 10) and (nen[0] != ry) and (nen[0] % 10 == 0):
@@ -595,3 +596,89 @@ def output_stdio(meishiki: Meishiki, unsei: Unsei = None):
         year += 1
 
     return 1
+
+
+def format_fortune_interactions(fortune_data: dict) -> str:
+    """運勢の相互作用をMarkdown形式でフォーマット"""
+    interactions = []
+    
+    if fortune_data['kango'] != -1:
+        interactions.append("干合")
+    if fortune_data['shigo'] != -1:
+        interactions.append("支合")
+    if fortune_data['hogo'] != -1:
+        interactions.append("方合")
+    if fortune_data['sango'] != -1:
+        interactions.append("三合")
+    if fortune_data['hankai'] != -1:
+        interactions.append("半会")
+    if fortune_data['tensen_chichu'] != -1:
+        interactions.append("天戦地冲")
+    if fortune_data['chu'] != -1:
+        interactions.append("冲")
+    if fortune_data['kei'] != -1:
+        interactions.append("刑")
+    if fortune_data['gai'] != -1:
+        interactions.append("害")
+    
+    return ", ".join(interactions) if interactions else "なし"
+
+
+def output_daily_fortune_markdown(meishiki: Meishiki, target_date) -> str:
+    """日運をMarkdown形式で出力"""
+    from datetime import datetime
+    if isinstance(target_date, str):
+        target_date = datetime.fromisoformat(target_date)
+    
+    daily_fortune = calculate_daily_fortune(meishiki, target_date)
+    
+    lines = []
+    lines.append(f"# 日運 - {target_date.strftime('%Y年%m月%d日')}")
+    lines.append("")
+    lines.append(f"- **干支**: {kd.kan[daily_fortune['kan']]}{kd.shi[daily_fortune['shi']]}")
+    lines.append(f"- **通変**: {kd.tsuhen[daily_fortune['tsuhen']]}")
+    lines.append(f"- **相互作用**: {format_fortune_interactions(daily_fortune)}")
+    lines.append("")
+    
+    return "\n".join(lines)
+
+
+def output_weekly_fortune_markdown(meishiki: Meishiki, week_start) -> str:
+    """週運をMarkdown形式で出力"""
+    from datetime import datetime, timedelta
+    if isinstance(week_start, str):
+        week_start = datetime.fromisoformat(week_start)
+    
+    weekly_fortune = calculate_weekly_fortune(meishiki, week_start)
+    week_end = week_start + timedelta(days=6)
+    
+    lines = []
+    lines.append(f"# 週運 - {week_start.strftime('%Y年%m月%d日')}〜{week_end.strftime('%m月%d日')}")
+    lines.append("")
+    
+    weekdays = ["月", "火", "水", "木", "金", "土", "日"]
+    for i, daily_data in enumerate(weekly_fortune):
+        date = daily_data['date']
+        weekday = weekdays[date.weekday()]
+        lines.append(f"## {date.strftime('%m月%d日')}（{weekday}）")
+        lines.append(f"- **干支**: {kd.kan[daily_data['kan']]}{kd.shi[daily_data['shi']]}")
+        lines.append(f"- **通変**: {kd.tsuhen[daily_data['tsuhen']]}")
+        lines.append(f"- **相互作用**: {format_fortune_interactions(daily_data)}")
+        lines.append("")
+    
+    return "\n".join(lines)
+
+
+def output_monthly_fortune_markdown(meishiki: Meishiki, target_year: int, target_month: int) -> str:
+    """月運をMarkdown形式で出力"""
+    monthly_fortune = calculate_monthly_fortune(meishiki, target_year, target_month)
+    
+    lines = []
+    lines.append(f"# 月運 - {target_year}年{target_month}月")
+    lines.append("")
+    lines.append(f"- **干支**: {kd.kan[monthly_fortune['kan']]}{kd.shi[monthly_fortune['shi']]}")
+    lines.append(f"- **通変**: {kd.tsuhen[monthly_fortune['tsuhen']]}")
+    lines.append(f"- **相互作用**: {format_fortune_interactions(monthly_fortune)}")
+    lines.append("")
+    
+    return "\n".join(lines)
