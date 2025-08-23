@@ -65,8 +65,8 @@ class TestUnseiMethods:
         birthday = datetime(1978, 9, 26, 13, 51)
         meishiki = build_meishiki(birthday, Sex.MALE)
         
-        # 2024年1月の月運を計算
-        monthly_fortune = calculate_monthly_fortune(meishiki, 2024, 1)
+        # 2024年1月の月運を計算（実装は date/datetime を受け取る）
+        monthly_fortune = calculate_monthly_fortune(meishiki, datetime(2024, 1, 1))
         
         assert isinstance(monthly_fortune, dict)
         assert monthly_fortune['year'] == 2024

@@ -1,6 +1,5 @@
 from jinja2 import Environment, FileSystemLoader
-from datetime import datetime as dt
-
+from datetime import datetime as dt, timedelta
 from meishiki.consts import kd, TemplateType, Sex
 from meishiki.meishiki import Meishiki
 from meishiki.unsei import Unsei, calculate_daily_fortune, calculate_weekly_fortune, calculate_monthly_fortune
@@ -624,12 +623,8 @@ def format_fortune_interactions(fortune_data: dict) -> str:
     return ", ".join(interactions) if interactions else "なし"
 
 
-def output_daily_fortune_markdown(meishiki: Meishiki, target_date) -> str:
+def output_daily_fortune_markdown(meishiki: Meishiki, target_date: dt.date) -> str:
     """日運をMarkdown形式で出力"""
-    from datetime import datetime
-    if isinstance(target_date, str):
-        target_date = datetime.fromisoformat(target_date)
-    
     daily_fortune = calculate_daily_fortune(meishiki, target_date)
     
     lines = []
@@ -643,12 +638,8 @@ def output_daily_fortune_markdown(meishiki: Meishiki, target_date) -> str:
     return "\n".join(lines)
 
 
-def output_weekly_fortune_markdown(meishiki: Meishiki, week_start) -> str:
+def output_weekly_fortune_markdown(meishiki: Meishiki, week_start: dt.date) -> str:
     """週運をMarkdown形式で出力"""
-    from datetime import datetime, timedelta
-    if isinstance(week_start, str):
-        week_start = datetime.fromisoformat(week_start)
-    
     weekly_fortune = calculate_weekly_fortune(meishiki, week_start)
     week_end = week_start + timedelta(days=6)
     
@@ -669,12 +660,12 @@ def output_weekly_fortune_markdown(meishiki: Meishiki, week_start) -> str:
     return "\n".join(lines)
 
 
-def output_monthly_fortune_markdown(meishiki: Meishiki, target_year: int, target_month: int) -> str:
+def output_monthly_fortune_markdown(meishiki: Meishiki, target_date: dt.date) -> str:
     """月運をMarkdown形式で出力"""
-    monthly_fortune = calculate_monthly_fortune(meishiki, target_year, target_month)
+    monthly_fortune = calculate_monthly_fortune(meishiki, target_date)
     
     lines = []
-    lines.append(f"# 月運 - {target_year}年{target_month}月")
+    lines.append(f"# 月運 - {target_date.strftime('%Y年%m月%d日')}〜{target_date.strftime('%m月%d日')}")
     lines.append("")
     lines.append(f"- **干支**: {kd.kan[monthly_fortune['kan']]}{kd.shi[monthly_fortune['shi']]}")
     lines.append(f"- **通変**: {kd.tsuhen[monthly_fortune['tsuhen']]}")

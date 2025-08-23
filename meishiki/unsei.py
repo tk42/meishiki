@@ -1,5 +1,5 @@
 from typing import List
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from dataclasses import field, dataclass
 
 from meishiki.consts import kd, Sex
@@ -381,22 +381,22 @@ def build_unsei(meishiki: Meishiki) -> Unsei:
     return Unsei(daiun, nenun)
 
 
-def calculate_monthly_fortune(meishiki: Meishiki, target_year: int, target_month: int) -> dict:
+def calculate_monthly_fortune(meishiki: Meishiki, target_date: date) -> dict:
     """
     特定月の運勢を計算する
     
     Args:
         meishiki: 命式データ
-        target_year: 対象年
-        target_month: 対象月
+        target_date: 対象日（その月の任意の日）
     
     Returns:
         dict: 月運データ（干支、通変、相互作用など）
     """
     # 対象月の月柱干支を取得（節入りを考慮）
-    target_date = datetime(target_year, target_month, 15)  # 月の中旬を基準日とする
-    y_kan, y_shi = find_year_kanshi(target_date)
-    m_kan, m_shi = find_month_kanshi(target_date, y_kan)
+    # dateをdatetimeに変換して既存の関数を使用
+    target_datetime = datetime.combine(target_date, datetime.min.time())
+    y_kan, y_shi = find_year_kanshi(target_datetime)
+    m_kan, m_shi = find_month_kanshi(target_datetime, y_kan)
     
     # 通変を計算
     tsuhen = kd.kan_tsuhen[meishiki.nikkan].index(m_kan)
@@ -422,8 +422,8 @@ def calculate_monthly_fortune(meishiki: Meishiki, target_year: int, target_month
     gai = is_gai(meishiki.chishi, m_shi)  # 害
     
     return {
-        'year': target_year,
-        'month': target_month,
+        'year': target_date.year,
+        'month': target_date.month,
         'kan': m_kan,
         'shi': m_shi,
         'tsuhen': tsuhen,
@@ -439,7 +439,7 @@ def calculate_monthly_fortune(meishiki: Meishiki, target_year: int, target_month
     }
 
 
-def calculate_daily_fortune(meishiki: Meishiki, target_date: datetime) -> dict:
+def calculate_daily_fortune(meishiki: Meishiki, target_date: date) -> dict:
     """
     特定日の運勢を計算する
     
@@ -451,7 +451,9 @@ def calculate_daily_fortune(meishiki: Meishiki, target_date: datetime) -> dict:
         dict: 日運データ（干支、通変、相互作用など）
     """
     # 対象日の日柱干支を取得
-    d_kan, d_shi = find_day_kanshi(target_date)
+    # dateをdatetimeに変換して既存の関数を使用
+    target_datetime = datetime.combine(target_date, datetime.min.time())
+    d_kan, d_shi = find_day_kanshi(target_datetime)
     
     # 通変を計算
     tsuhen = kd.kan_tsuhen[meishiki.nikkan].index(d_kan)
@@ -493,7 +495,7 @@ def calculate_daily_fortune(meishiki: Meishiki, target_date: datetime) -> dict:
     }
 
 
-def calculate_weekly_fortune(meishiki: Meishiki, week_start: datetime) -> List[dict]:
+def calculate_weekly_fortune(meishiki: Meishiki, week_start: date) -> List[dict]:
     """
     週の運勢を計算する（7日分の日運を返す）
     
@@ -504,8 +506,6 @@ def calculate_weekly_fortune(meishiki: Meishiki, week_start: datetime) -> List[d
     Returns:
         List[dict]: 7日分の日運データのリスト
     """
-    from datetime import timedelta
-    
     weekly_fortune = []
     for i in range(7):
         target_date = week_start + timedelta(days=i)

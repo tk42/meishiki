@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="meishiki",
-    version="0.3.11",
+    version="0.3.12",
     author="tk42",
     author_email="nsplat+pip@gmail.com",
     description="Calculation of Four Pillars of Destiny",
